@@ -1,0 +1,324 @@
+\documentclass[12pt]{report}
+\usepackage[english]{babel}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=30mm,
+ right=25mm,
+ top=35mm,
+ bottom=30mm
+ }
+ 
+ \interfootnotelinepenalty=10000
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\nouppercase {\leftmark}}
+%\lhead{Alex Paterson}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\newcounter{equationset}
+\newcommand{\equationset}[1]{% \equationset{<caption>}
+  \refstepcounter{equationset}% Step counter
+  \noindent\makebox[\linewidth]{\textbf{Equation~\theequationset}: \textnormal{#1}}\\}% Print caption
+
+\usepackage{setspace}
+\usepackage[utf8]{inputenc}
+\usepackage[dvipsnames]{xcolor} %Additional Colours for text
+
+%\PassOptionsToPackage{dvipsnames}{xcolor}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{seqsplit}
+\usepackage{wasysym}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{multirow}
+\usepackage{rotating}                           %Rotating for large tables
+\graphicspath{{logos/}} 
+\usepackage{graphbox}
+%\usepackage{pdfpages}
+\usepackage[symbol]{footmisc}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
+\usepackage[superscript,biblabel]{cite}
+\bibliographystyle{unsrt}
+
+\usepackage[utf8]{inputenc}
+\usepackage[acronym, nonumberlist]{glossaries}
+\usepackage[font=small,labelfont=bf]{caption}
+
+\makenoidxglossaries
+\newacronym{sprint}{SPRINT}{Systolic Blood Pressure Intervention Trial}
+\newacronym{bp}{BP}{Blood Pressure}
+\newacronym{gwas}{GWAS}{Genome Wide Association Study}
+\newacronym{raas}{RAAS}{Renin-Angiotensin-Aldosterone-System}
+\newacronym{sbp}{SBP}{Systolic Blood Pressure}
+\newacronym{dbp}{DBP}{Diastolic Blood Pressure}
+\newacronym{balf}{BALF}{Broncho-Alveolar Lavage Fluid}
+\newacronym{lps}{LPS}{LipoPolySaccharide}
+\newacronym{elisa}{ELISA}{Enzyme-Linked Immunosorbent Assay}
+\newacronym{facs}{FACS}{Fluorescence-Activated Cell Sorting}
+\newacronym{tlr4}{TLR4}{Toll-Like Receptor 4}
+\newacronym{tlrs}{TLRs}{Toll-Like Receptors}
+\newacronym{prrs}{PRRs}{Pathogen-Recognition Receptor families}
+\newacronym{pamp}{PAMP}{Pathogen Associated Molecular Pattern}
+\newacronym{bsa}{BSA}{Bovine Serum Albumin}
+\newacronym{pbs}{PBS}{Phosphate Buffered Saline}
+\newacronym{ifit1}{Ifit1}{Interferon-induced Protein with Tetratricopeptide Repeats 1}
+\newacronym{isg}{ISG}{Interferon Stimulated Gene}
+\newacronym{ifit}{Ifit}{Interferon-induced Protein with Tetratricopeptide Repeats}
+\newacronym{isre}{ISRE}{Interferon Stimulated Response Elements}
+
+\newacronym{sns}{SNS}{Sympathetic Nervous System}
+\newacronym{ans}{ANS}{Autonomic Nervous System}
+\newacronym{cns}{CNS}{Central Nervous System}
+\newacronym{pvn}{PVN}{Paraventricular Nucleus}
+\newacronym{rvlm}{RVLM}{Rostral Ventrolateral Medulla}
+\newacronym{son}{SON}{Supraoptic Nucleus}
+\newacronym{nts}{NTS}{Nucleus Tractus Solitarii}
+\newacronym{nil}{NIL}{Neurintermediate Lobe}
+\newacronym{brs}{BRS}{Baroreceptor Sensitivity}
+\newacronym{pi}{PI}{Pulse Interval}
+
+\newacronym{qc}{QC}{Quality Control}
+\newacronym{rma}{RMA}{Robust Multiarray Averaging}
+\newacronym{pca}{PCA}{Principal Component Analysis}
+\newacronym{dge}{DGE}{Differential Gene Expression}
+\newacronym{fdr}{FDR}{False Discovery Rate}
+\newacronym{sdev}{STDev}{Standard Deviation}
+\newacronym{pcr}{PCR}{Polymerase Chain Reaction}
+
+\newacronym{shr}{SHR}{Spontaneously Hypertensive Rat}
+\newacronym{bhr}{BHR}{Borderline Hypertensive Rat}
+\newacronym{wky}{WKY}{Wistar Kyoto}
+\newacronym{sd}{SD}{Sprague-Dawley}
+\newacronym{lh}{LH}{Lister Hooded}
+\newacronym{2k1c}{2K1C}{Two-Kidney One-Clip}
+\newacronym{1k1c}{1K1C}{One-Kidney One-Clip}
+\newacronym{gk}{GK}{Goto-Kakizaki}
+\newacronym{mns}{MNS}{Milan Normotensive Strain}
+\newacronym{mhs}{MHS}{Milan Hypertensive Strain}
+\newacronym{lew}{LEW}{Lewis}
+\newacronym{wag}{WAG}{Wistar Albino Glaxo}
+\newacronym{bbdp}{BBDP}{Biobreeding Diabetes Prone}
+\newacronym{ss}{SS}{Salt Sensitive}
+\newacronym{sr}{SR}{Salt Resistant}
+\newacronym{ln}{LN}{Lyon Normotensive}
+\newacronym{ll}{LL}{Lyon Low blood pressure}
+\newacronym{lyh}{LH}{Lyon Hypertensive}
+\newacronym{f344}{F344}{Fischer 344}
+\newacronym{sbh}{SBH}{Sabra Hypertension Prone}
+\newacronym{sbn}{SBN}{Sabra Normotensive}
+\newacronym{fhl}{FHL}{Fawn Hooded Low blood pressure}
+\newacronym{fhh}{FHH}{Fawn Hooded High blood pressure}
+\newacronym{aci}{ACI}{August \& Copenhagen Inbred}
+\newacronym{le}{LE}{Long Evans}
+\newacronym{bn}{BN}{Brown Norway}
+
+\newacronym{mcc}{MCC}{Matthew's Correlation Coefficient}
+\newacronym{rna}{RNA}{Ribonucleic Acid}
+\newacronym{mrna}{mRNA}{Messenger Ribonucleic Acid}
+\newacronym{rrna}{rRNA}{Ribosomal Ribonucleic Acid}
+\newacronym{sbs}{SBS}{Sequencing By Synthesis}
+\newacronym{dntp}{dNTP}{deoxynucleotide Triphosphate}
+\newacronym{eqtl}{eQTL}{Expressed Quantitative Trait-Loci}
+\newacronym{aspa}{ASPA}{Home Office Animals (Scientific Procedures) Act 1986}
+\newacronym{quod}{QUOD}{Quality in Organ Donation}
+
+\newacronym{star}{STAR}{Spliced Transcripts Alignment to a Reference}
+\newacronym{mmp}{MMP}{Maximum Mappable Prefix}
+\newacronym{tac}{TAC}{Transcriptome Analysis Console}
+\newacronym{gtf}{GTF}{Gene Transfer Format}
+\newacronym{miqe}{MIQE}{Minimum Information for publication of Quantitative real-time PCR Experiments}
+\newacronym{snp}{SNP}{Single Nucleotide Polymorphism}
+\newacronym{snv}{SNV}{Single Nucleotide Variants}
+\newacronym{cv}{CV}{Coefficient of Variance}
+\newacronym{map}{MAP}{Mean Arterial Pressure}
+\newacronym{mds}{MDS}{Multidimensional Scaling Analysis}
+\newacronym{sem}{SEM}{Standard Error of the Mean}
+\newacronym{anova}{ANOVA}{Analysis of Variance}
+\newacronym{mmhg}{mmHg}{Millimetres of Mercury}
+\newacronym{bpm}{BPM}{Beats Per Minute}
+\newacronym{ci}{CI}{Confidence Interval}
+\newacronym{rpkm}{RPKM}{Reads Per Kilobase of exon model per Million reads}
+\newacronym{fpkm}{FPKM}{Fragments Per Kilobase of exon model per Million reads}
+\newacronym{tpm}{TPM}{Transcripts Per Million}
+\newacronym{tmm}{TMM}{Trimmed Mean of the M-Values}
+\newacronym{edger}{EdgeR}{Empirical analysis of Digital Gene Expression data in R}
+\newacronym{deseq}{DESeq}{Differential gene Expression analysis based on the negative binomial distribution}
+\newacronym{fft}{FFT}{Fast Fourier Transformation}
+\newacronym{lf}{LF}{Low Frequency}
+\newacronym{hf}{HF}{High Frequency}
+\newacronym{vlf}{VLF}{Very Low Frequency}
+
+\newacronym{mn}{MN}{Magnocellular Division}
+\newacronym{dp}{DP}{Dorsal Parvocellular Subdivision}
+\newacronym{mp}{MP}{Medial Parvocellular Subdivision}
+\newacronym{vp}{VP}{Ventral Parvocellular Subdivision}
+\newacronym{p}{P}{Periventricular Parvocellular Subdividion}
+\newacronym{who}{WHO}{World Health Organisation}
+
+\newacronym{dh}{DH}{Dehydration}
+\newacronym{etoh}{EtOH}{Ethanol}
+\newacronym{edta}{EDTA}{Ethylenediaminetetraacetic Acid}
+\newacronym{nos}{NOS}{Nitric Oxide Synthase}
+\newacronym{lname}{L-NAME}{N($\gamma$)-nitro-L-Arginine Methyl Ester}
+\newacronym{gc}{GC}{Guanine-Cytosine}
+
+\title{
+	{\Huge The Hunt for Novel Prognostic Blood Biomarkers of Hypertension}\\
+	{\vspace{7mm}}
+	{\large University of Bristol}\\
+	{\vspace{5mm}}
+	{\includegraphics{bristolcrest_colour.pdf} \\
+	{\vspace{5mm}}
+	{\large \textbf{Alex R. Paterson}} \\
+	{\vspace{5mm}}
+	{\small A dissertation submitted to the University of Bristol in accordance with the requirements for award of the degree of Doctor of Philosophy in the Faculty of Translational Health Sciences}} \\
+}
+\date{September 2019}
+
+%\title{
+%	{\Huge The Hunt for Novel Prognostic Blood Biomarkers of Hypertension}\\
+%	{\vspace{9mm}}
+%	{\large University of Bristol}\\
+%	{\vspace{9mm}}
+%	{\includegraphics{bristolcrest_colour.pdf}} \\
+%	{\vspace{9mm}}
+%	{\large \textbf{Alex R. Paterson}} \\
+%	{\vspace{9mm}}
+%	{\small A dissertation submitted to the University of Bristol in accordance with the requirements for award of the degree of Doctor of Philosophy in the Faculty of Medicine \& Dentistry} \\
+%}
+%\date{September 2019}
+
+%
+\begin{document}
+\pagenumbering{Roman}
+%
+\maketitle
+%
+\chapter*{Abstract}
+\singlespacing
+Hypertension is defined as a chronic state of elevated blood pressure, and results in a significantly increased risk of developing diseases such as; coronary heart disease, kidney damage and stroke. Essential hypertension is a multifactorial and polygenic condition that remains asymptomatic until much of the damage has already been done, resulting in many going undiagnosed (1 in 3) until the health impact has become severe. Globally, hypertension is responsible for 9.4 million deaths every year. Therefore, in order to improve upon the diagnostic assessment of the disease, this current study made use of the Spontaneously Hypertensive Rat (SHR) as a polygenic model of elevated blood pressure. Using an optimised next generation sequencing approach to guide biomarker discovery, transcripts predicted to be significantly regulated between the SHR and its normotensive control were selected as candidate biomarkers of hypertension. The \acrfull{ifit1} saw a robust elevation in the blood of SHRs at both juvenile and adult ages. This, coupled with its key integretive role in innate immunity, lead to Ifit1 being selected for further validation through a series of environmentally induced forms of elevating blood pressure. Ifit1 performed well as a biomarker of the SHR strain, against a host of normotensive controls. As such, Ifit1 was selected for additional characterisation in the blood through Flow Cytometry as well as assessment in a key integrative region of the brain tasked with cardiovascular control.
+
+\newpage
+\singlespacing
+\chapter*{}
+%\textit{To those who inspired it \\ and will not read it}
+\begin{center}
+\textit{For Mum and Dad,} \\
+\vspace{5mm}
+\textit{I could not have done it without your genetic material}
+%\textit{If you don't make mistakes, \\ you're doing it wrong.} \\
+%\vspace{5mm}
+%\textit{If you don't correct those mistakes, \\ you're doing it really wrong.} \\
+%\vspace{5mm}
+%\textit{If you can't accept that you're mistaken, \\ you're not doing it at all.} \\
+\end{center}
+%
+\chapter*{Declaration}
+I declare that the work in this dissertation was carried out in accordance with the requirements of the University's \textit{Regulations and Code of Practice for Research Degree Programmes} and that it has not been submitted for any other academic award.
+Except where indicated by specific reference in the text, the work is the candidate's own work. Work done in collaboration with, or with the assistance of, others, is indicated as such. Any views expressed in the dissertation are those of the author.
+
+\vspace{10cm}
+\noindent
+Signed:...................................................................Date:..................................
+
+%
+\chapter*{Acknowledgements}
+%\doublespacing
+I would like to take this opportunity to thank Prof. Charles Hindmarch and Prof. David Murphy for their continued mentorship. Together, they have inspired and motivated me throughout this body of work, and have left an indelible mark on my future career in research. \\
+
+A sincere thank you also goes to Dr. Olivera Šarenac and her colleagues in Belgrade, for warmly welcoming me several times into their laboratory. Olivera's patience and knowledge have given me a firm foundation of surgical techniques in assessing physiology.\\
+
+I would like to dedicate this work to my family, for their encouragement and support. They have always been a great source of strength for me and I will always admire them for this. \\
+
+A special thank you goes to Dr Michael Greenwood and Dr Mingkwan Greenwood for their advice over the years. Not only have they supported my work at the experimental level, but they have always guided my research and provided a daily sounding board for ideas. \\
+
+Despite their best efforts to distract and therefore derail my career, I would like to thank Ben Gillard, Dr Ben Flynn, George Horn, Dr Matt Birnie, Audrys Pauza, and Dr Paul Bishop. Their humour and ability to lift my spirits have seen me through the many stressful moments of the past four years. \\
+
+Finally, I would like to extend a big thank you to the Murphy Group as a whole, in addition to many members of the Lightman Group. From experimental advice to coffee runs, the group have been there for any and all PhD woes. All of whom I am proud to call friends. \\
+%\singlespacing
+%
+\tableofcontents
+%
+\listoffigures
+%
+\listoftables
+%
+%
+\printnoidxglossaries
+%
+\chapter{Introduction} \pagenumbering{arabic}
+\input{Chapters/introduction}
+%
+\chapter{Candidate Selection Using RNAseq}
+\input{Chapters/chapter1}
+%
+\chapter{Optimisation of High-Throughput approach}
+\input{Chapters/chapter2}
+%
+\chapter{Validation of Candidate Selection in WKY and SHR Strains}
+\input{Chapters/chapter3}
+%
+\chapter{Widening the Search - Additional models of hypertension}
+\input{Chapters/chapter4}
+%
+\chapter{Characterisation of Ifit1}
+\input{Chapters/chapter5}
+%
+\chapter{Reflections \& Future Directions}
+\input{Chapters/reflections}
+%
+\appendix
+\chapter{Chapter 1}
+\input{chapters/appendix1}
+\chapter{Chapter 3}
+\input{chapters/appendix3}
+\chapter{Chapter 5}
+\input{chapters/appendix5}
+%
+\chapter{Publications}
+\newpage
+\includegraphics[width=1.1\textwidth,page=1]{Chapters/Loewen_et_al-2017-Experimental_Physiology.pdf}
+\includegraphics[width=1.1\textwidth,page=2]{Chapters/Loewen_et_al-2017-Experimental_Physiology.pdf}
+\includegraphics[width=1.1\textwidth,page=3]{Chapters/Loewen_et_al-2017-Experimental_Physiology.pdf}
+\includegraphics[width=1.1\textwidth,page=4]{Chapters/Loewen_et_al-2017-Experimental_Physiology.pdf}
+\includegraphics[width=1.1\textwidth,page=5]{Chapters/Loewen_et_al-2017-Experimental_Physiology.pdf}
+\includegraphics[width=1.1\textwidth,page=6]{Chapters/Loewen_et_al-2017-Experimental_Physiology.pdf}
+\includegraphics[width=1.1\textwidth,page=7]{Chapters/Loewen_et_al-2017-Experimental_Physiology.pdf}
+
+\includegraphics[width=1.1\textwidth,page=1]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=2]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=3]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=4]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=5]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=6]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=7]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=8]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=9]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=10]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=11]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=12]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=13]{Chapters/aging.pdf}
+\includegraphics[width=1.1\textwidth,page=14]{Chapters/aging.pdf}
+
+%\includepdf{Chapters/Loewen_et_al-2017-Experimental_Physiology.pdf}
+\singlespacing
+\bibliography{Citations/Thesis}
+%
+\end{document}

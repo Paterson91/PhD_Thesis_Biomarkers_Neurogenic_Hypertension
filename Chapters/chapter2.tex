@@ -1,0 +1,564 @@
+\doublespacing
+\section{Introduction}
+
+\subsection{Building upon previous findings}
+
+Given the high false discovery rate observed for the n=3 dataset, it is pertinent to revisit the standard practice for any given RNAseq experiment. As an RNAseq pipeline presents a long string of individual manipulation events, both pre- and post sequencing, there exist many variables that could potentially lead to confounding results. The vastly different pipelines and methods of library preparation do not lead to directly comparable datasets. Instead, here the focus is given to the main potential sources of error, in the hopes of optimising each step in the approach for future experiments. 
+
+\subsection{\textit{In Silico} Optimisation}
+
+Over the last few years, increasing numbers of novel differential expression methods have been produced, each assuming a different statistical spread to best represent the relationship between raw RNAseq counts and actual abundance of genes. 
+
+A key issue with assessing the different normalisation strategies is the need to validate each test’s predicted expression changes using other technologies in order to account for the presence of False Discovery Rates. Classically this is done by selecting a cross-section of transcript candidates and performing qPCR to assess how accurate the predicted fold changes are when compared to the biologically observed fold changes qPCR shows. While this is the best way to validate the large datasets NGS produce, it is time consuming and can always be improved upon by including more and more validation candidates.  
+
+One of the ways in which a pipeline can be optimised is via the inclusion of synthetically generated sequencing data. With a standardised dataset, the number of differentially expressed genes can be set, and furthermore compared with the number genes predicted to be differentially expressed by each statistical method. Here, the R studio program CompcodeR is used, which enables the synthesis of a dataset to the specifications set out by the user \cite{Soneson2014}. The program makes use of the data generation method outlined in Soneson and Delorenzi (2013) \cite{Soneson2013}. 
+
+\subsection{Repetition of RNAseq Dataset}
+
+Using the literature, and findings from the $\textit{In Silico}$ optimisation, a repeat of the previous RNAseq experiment was conducted. Based on these results, alterations were made to the number of replicates, library preparation, and the analysis pipeline itself. All of which will be inspected to see how each alteration can serve to optimise the approach, and lead to results more inline with the qPCR data obtained in the previous chapter. 
+
+\subsubsection{Library Preparation}
+
+One of the first major decisions to be made during an RNAseq experiment, is the way in which the library of transcripts will be made. \acrfull{rrna} is by far the most highly abundant constituent of the total transcriptome, for any animal or human tissue, comprising 80-90\% of the total \acrshort{rna} \cite{ONeil2013}. Therefore, the transcripts of interest must be isolated in order to get the most from the finite number of reads each RNAseq experiment is capable of. With this in mind, two main options exist to isolate \acrshort{mrna} transcripts; Poly(A) selection, and \acrshort{rrna} depletion. Poly(A) selection involves the selection of polyadenylated \acrshort{rna} (Including \acrshort{mrna} transcripts) using oligo(dT) primers to bind to the polyadenylated tails. \acrshort{rrna} depletion takes an alternative approach to removing the highly abundant \acrshort{rrna} transcripts. Using magnetic beads with \acrshort{rrna} complimentary sequences, \acrshort{rrna}s hybridize to the beads and can be subsequently removed from the total \acrshort{rna} sample by isolating the magnetic beads that now contain them.  Each of these approaches has a series of unique advantages and disadvantages, with many studies discussing these at great length \cite{Kumar2017,Schuierer2017,Guo2015,Alberti2014}. 
+
+Where input is limited, or potentially degraded, \acrshort{rrna} depletion manages to leave fragmented transcripts in the sample library. This is due to the potential lack of polyadenylated tail, preventing these fragments from being enriched by use of the Oligo(dT) selection process \cite{Kumar2017,Schuierer2017,Alberti2014}. As the input for this series of experiments is high in abundance, and low in degradation, this does not present a problem that needs overcoming. 
+
+With such high quality input tissue, the key consideration for this library preparation is how to maximise the number counts generated via RNAseq, and specifically for those types of transcripts that are the focal point of this study. As touched upon briefly in section ~\ref{Comparison of RNAseq and qPCR output}, Poly(A) selection presents the best way in which to maximise the sequencing depth as the focus here is on the protein-coding fraction of the transcriptome \cite{Kumar2017,Zhao2018,Guo2015}. 
+
+The previous n=3 dataset was obtained through \acrshort{rrna} depletion (Section ~\ref{method_n=3}). Here, the new RNAseq experiment makes use of the Poly(A) selection method of library preparation in an attempt to see if this can resolve the high levels of duplicated reads observed in the n=3 dataset, allowing more reads to be used for transcripts of interest. 
+
+\subsubsection{Number of replicates}
+
+Building upon the $\textit{In Silico}$ optimisation, and the literature review conducted in section ~\ref{Comparison of RNAseq and qPCR output}, the new RNAseq experiment will make use of an optimised number of replicates in order to minimise the false discovery rate. 
+
+\subsubsection{Analysis Pipeline}
+
+Once samples are resolved by the RNA sequencer, the resulting reads need to mapped to a reference genome in order to identify precisely which genes these original transcripts were produced from. For this reason, the ability to align as many reads as possible to the reference, and to do so accurately, has the potential to translate to significant changes in the ultimate DGE analysis. 
+
+The advent of RNAseq technology gave rise to a new challenge when trying align reads to a reference genome, as new software had to take into account alternative splicing. A new generation of splice-aware software was therefore created, with several advances over the earlier BLAST-like alignment tool (BLAT) \cite{Kent2002,Fonseca2012}. In 2009, Tophat was released as part of this new generation, and made use of a two-step approach to read alignment. Firstly, reads were assessed to discover exon junctions, before using this information as part of the final alignment to the reference genome \cite{Trapnell2009}. This, and similar tools, set the standard in read alignment algorithms for a long time and was therefore a key step in the previous pipeline employed for the n=3 dataset. However, year on year additional programs are released, with each purporting to be capable of; greater alignment rate, higher alignment accuracy, or faster alignment compute speeds. All of which are valuable attributes to any RNAseq experiment. 
+
+As with the DGE prediction software, several groups have sought to compare these approaches with both biologically and $\textit{in silico}$ generated datasets. A paper in 2013, compared 26 mapping protocols based on 11 programs and found major differences between these methods based on a series of performance benchmarks \cite{Engstrom2013}. The benchmarks used included; total alignment yield, exon junction discovery, suitability of alignments for transcript reconstruction, mismatch and gap placement, and basewise accuracy. These tests were conducted on paired-end RNAseq reads from a human leukemia cell line (K562), mouse brain lysates (C57BL/6NJ), as well as two simulated human transcriptomes \cite{Djebali2012,Danecek2012,Grant2011}. From the biologically derived samples (i.e. the K562, and CB57BL/6NJ), both were Poly(A) selected libraries. From their comparison, the \acrfull{star} software performed the best across a host of the performance metrics tested, most notably the highest level of primary alignments devoid of mismatches, and the highest accuracy in splice-detection \cite{Dobin2012}. Based on the findings of this paper, and others, \acrshort{star} was selected as a new splice-aware aligner to compare against the previous Tophat alignment software \cite{Baruzzo2017,Raplee2019}. 
+
+\subsection{Microarray vs RNAseq}
+
+While RNAseq presents the most current and thorough way to perform a high-throughput analysis of the transcriptome, microarrays have continued in their popularity over the last few years due to their reliability and relatively low cost. This is especially true when studying a well characterised model organism with a well defined genetic annotation, such as the \textit{Rattus norvegicus}, as microarray chips can yield an enormously comprehensive snapshot of the transcriptomic profile of an animal. Here, the focus is on transcripts that are significantly modulated between the two experimental strains being studied. With this in mind, microarray presents an approach that is more than capable of shining light on these differences, and can furthermore act as an independent technology by which to validate the RNAseq based approach used here. Therefore, a comparison between an RNAseq and Microarray output would provide a key foundation in pushing forward with biomarker discovery.
+
+\section{Aims}
+Building upon the n=3 dataset, priority is given to assessing potential sources of the high false discovery rate, and optimising the approach for subsequent studies. This will be achieved via the following;\\
+\begin{itemize}
+\singlespacing
+  \item An \textit{In Silico} assessment of the optimum number of replicates  \\
+  \item An \textit{In Silico} assessment of the optimum statistical software suite for calling differential gene expression  \\
+  \item Performing a microarray of differential gene expression  \\
+  \item A repeat of the RNAseq experiment, with an adjusted library preparation method and number of replicates  \\
+  \item A comparison of microarray output with RNAseq output \\
+\end{itemize}
+
+
+\section{Materials and Methods}
+
+\subsection{\textit{In Silico} Optimisation}
+
+\subsubsection{Comparison of Methods (\textit{n=3})} \label{CompMethods}
+
+Using the CompcodeR program in an RStudio environment, a series of synthetically generated RNAseq datasets were produced.  The \textit{generateSyntheticdata} command includes many different arguments to best replicate the type of data the finally adopted differential expression method is to be used on. The below table (Table ~\ref{table:compcodeRsettings}) includes the settings used for the base comparison of methods (n=3; reads = 1x10$^{7}$; 12,500 total genes; 10\% Differentially expressed). These parameters were set to be comparable to the previous RNAseq data the laboratory had processed. The initial CompcodeR comparison therefore acted as a benchmark test of methods, before alterations to parameters were made for further optimisation of our pipeline. This run was performed via the \textit{runComparisonGUI} command, and repeated 10 times with all parameters left as default (0.05 for all settings). CompcodeR then runs a comparison of methods based on these 10 replicates. \\
+
+\begin{table}[!htbp]
+\scriptsize
+\centering
+\begin{tabular}{lrr}
+\textbf{Argument}               & \textbf{Amended Setting} & \textbf{Description}                                                                               \\
+\hline
+n.vars                 & 12500           & Initial number of genes to be generated \\
+                      &                 & in the simulated data set.                        \\
+Samples.per.cond       & 3               & Number of samples in each condition (n).                                                  \\
+n.diffexp              & 1250            & Number of genes simulated to be differentially \\
+                      &                   & expressed between the included conditions. \\
+seqdepth               & 1.00E+07        & Total number of mapped reads.                                                             \\
+Fraction.upregulated   & 0.5             & Fraction of differentially expressed  \\
+                        &               & genes that are upregulated                           \\
+Between.group.diffdisp & FALSE           & Sets whether or not levels of dispersion \\
+                        &                 &are different between conditions                 \\
+Filter.threshold.total & 1               & Threshold for total of any given gene \\
+&& across all replicates.                             \\
+\end{tabular}
+\caption[List of key arguments to \textit{generateSyntheticdata} command.]{List of key arguments to \textit{generateSyntheticdata} command. Here, are the specific parameters used for generation of the dataset used for the Comparison of Methods (section ~\ref{CompMethods}). For the Comparison of Replicates (section ~\ref{CompReplicates}), the \textit{Samples.per.cond} parameter was adjusted for the generation of each dataset to be used.}
+\label{table:compcodeRsettings}
+\end{table}
+
+\subsubsection{Comparison of Replicates} \label{CompReplicates}
+
+Once a comparison was made for a synthetic dataset with 3 replicates per group, a comparison of varying \textit{n} values was made by maintaining all parameters as above, but altering the \textit{sample.per.cond argument}. In order to narrow the optimisation, DESeq2 was selected for comparing the number of replicates due to its performance in the n=3 comparison against other DGE software. 
+
+\subsection{Tissue Preparation}
+
+Animals were sacrificed, had blood extracted and \acrshort{rna} isolated as outlined in Chapter 2 materials and methods. As blood tissue is primarily comprised of haemoglobin containing erythrocytes for the transportation of oxygen, the blood transcriptome comprises approximately 80-90\% globin \acrshort{mrna}. Samples therefore required depleting of these transcripts in order to prevent downstream techniques from only detecting the overly abundant globin \cite{Shin2014}. This was achieved by subjecting the \acrshort{rna} samples to a GLOBINClear$\textsuperscript{TM}$ Protocol \cite{ThermoFisherScientific}. Samples were initially assessed for RNA concentration using the Nanodrop 2000c (ThermoFisher) and normalised with RNAse-free water for RNA reactions between 1-10$\mu$g and input volumes of $\leq$14$\mu$l before running through the GLOBINclear procedure. This made use of biotinylated oligos, complementary to globin \acrshort{mrna}, to hybridize to the globin transcripts. Streptadvidin magnetic beads were then added to bind with the now biotinylated globin transcripts, and a magnetic microcentrifuge rig captured and isolated the bound complexes. This allowed for globin-free total RNA supernatant to be decanted, leaving the vast majority of the globin \acrshort{mrna} behind.
+
+The final RNA samples were sent to a private sequencing service for further analysis including library preparation, microarray and RNAseq assessment (SourceBioscience Limited - Nottingham, U.K.). 
+
+\subsection{N=6 RNAseq}
+
+For RNA-sequencing, libraries were built using the TruSeq Stranded \acrshort{mrna} kits (Illumina, Inc. - San Diego, CA, U.S.A.; Figure ~\ref{fig:truseqprep}). In a similar approach to the globin depletion protocol outlined above, polyadenylated \acrshort{mrna} was first isolated by use of binding complimentary oligo(dT)s bound to magnetic beads. This was contrary to the previously obtained RNAseq dataset (n=3) which made use of \acrshort{rrna} depletion rather than \acrshort{mrna} selection. The magnetic beads were then magnetically isolated from the \acrshort{rna} pool, along with the bound polyadenylated \acrshort{mrna} transcripts. The remaining \acrshort{mrna} was then cleaned, fragmented, and primed ready for cDNA synthesis (Step 1; Figure ~\ref{fig:truseqprep}). Using random nucleotide primers, the first cDNA strand is initially synthesised before actinomycin is used to prevent second strand synthesis (Step 2; Figure ~\ref{fig:truseqprep}). After this, the \acrshort{rna} template is degraded to ensure only the second strand is used for next cDNA synthesis. Here, Deoxyuridine Triphosphate (dUTP) nucleotides are used in place of Deoxythymidine Triphospgate (dTTP) nucleotides, in order to allow for a differentiation between the first and second strands of cDNA later on (Step 3; Figure ~\ref{fig:truseqprep}). The newly synthesised double stranded cDNA is next prepared for adapter ligation via an additional adenylation at the 3' end of each strand (Step 4; Figure ~\ref{fig:truseqprep}). This enables the cDNA to hybridize with the thymine overhang on the 3' end of the adapters. Adapters are ligated onto the cDNA fragment and dUTPs are enzymatically removed from the fragments (Step 5; Figure ~\ref{fig:truseqprep}). Following enzymatic removal of the dUTPs, fragments are PCR amplified to produce a resultant library that can be validated quantitatively via qPCR (Step 6/7; Figure ~\ref{fig:truseqprep}). Additional quality control takes place using a 2100 Bioanalyzer (Agilent Technologies) to assess fragment size and to ensure primer dimerisation has not occurred (Step 8; Figure ~\ref{fig:truseqprep}). Since each sample was ligated to an adapter containing a specific nucleotide sequence, libraries could then be pooled for running on the flow cell (Step 9/10; Figure ~\ref{fig:truseqprep}).
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=1.0\textwidth]{chapter2/Next_Generation_Sequencing_NGS_TruSeq_Stranded_mRNA.png}
+\caption[Overview of TruSeq Stranded mRNA Preparation protocol]{Overview of TruSeq Stranded \acrshort{mrna} Preparation protocol. Image adapted from www.abmgood.com}
+\label{fig:truseqprep}
+\end{figure*}
+
+Once libraries are washed over the flow cell cDNA fragments hybridise, via their adapters, to complimentary olignucleotides bound on to the flow cell. At this point, cluster generation will occur via bridge amplification to yield isolated clusters born from the same original fragment. After clustering, libraries were loaded onto an Illumina HiSeq 4000 flow cell (Illumina, Inc. - San Diego, CA, USA) and ran to obtain a final count of around 52 million paired-end reads per sample at 2 x 75bp read length. 
+
+\subsection{Microarray}
+
+For microarray analysis of the whole blood transcriptome, the current market leader for producing assay chips is ThermoFisher Scientific. When studying expression profiles within the rat, ThermoFisher offers two options as part of their Clariom$\textsuperscript{TM}$ range. The Clariom D$\textsuperscript{TM}$ Rat 1.0 Assay was selected over the Clariom S$\textsuperscript{TM}$ due to its ability to perform a comprehensive and detailed analysis of both coding and noncoding genes, in addition to exons and splice variants. This greater level of resolution comes at a greater financial cost, however it does futureproof the data for a more comprehensive analysis if required.
+
+In order to prepare for microarray analysis, the GeneChip$\textsuperscript{TM}$ Whole Transcript Pico protocol was followed (ThermoFisher Scientific, \cite{Applied}). Isolated and purified \acrshort{rna} was initially incubated with a reverse transcriptase and PCR primers containing a T7 promoter. This constituted the First-Strand cDNA synthesis step, and primes the 5' of the transcripts for further manipulation downstream. Next, a 3' adapter is added to the single-strand cDNA, and used as a template for double-stranded cDNA synthesis in a pre-$\textit{in vitro}$ transcription (IVT) amplification reaction. The reaction makes use of a DNA polymerase and RNase H to degrade the \acrshort{rna} and synthesise a single-stranded cDNA containing a 3' adapter. The resulting single-stranded cDNA could then be converted to double-stranded cDNA, enabling it to act as a template for $\textit{in vitro}$ transcription. This was achieved through Taq DNA polymerase and a set of Adapter-specific primers to simultaneously synthesise and pre-amplify the double-stranded cDNA. Once the double-stranded cDNA had been sufficiently amplified, anti-sense \acrshort{rna}, or complimentary \acrshort{rna} (cRNA), could be synthesised and further amplified via an $\textit{in vitro}$ transcription using the double-stranded cDNA as a template and the T7 RNA polymerase. This approach towards RNA preparation is derived from the Eberwine or RT-IVT method, outlined by Van Gelder $\textit{et al.}$, 1990 \cite{VanGelder1990}. The samples were next purified of any enzymes, inorganic phosphates, salts and unutilised nucleotides, using purification beads. This was in order to prepare the cRNA samples for the second-cycle single-stranded cDNA synthesis. 
+
+At that point, a spectrophotometry quality control checkpoint was carried out to assess purity and quantity of the cRNA samples and to normalise libraries ready for continuing. From the normalised libraries of cRNA, a sense-strand cDNA was synthesised through reverse transcription and second-cycle primers. The resulting sense-strand cDNA incorporates dUTP at a maintained ratio to the incorporated dTTP, preparing the cDNA for later fragmentation. RNase H was next used to hydrolyse the cRNA template, leaving the single-stranded cDNA. Following hydrolysis, another purification step was carried out on the second-cycle single-stranded cDNA and, after a second spectrophotometry quality control checkpoint, the samples were ready for cDNA fragmentation and labeling. The purified, sense-strand cDNA was next biochemically fragmented by a combination of Uracil-DNA Glycosylase (UDG) and Apurinic/ayrimidinic Endonuclease 1 (APE1), utilising the unnatural dUTP residues introduced earlier in the protocol, to break the DNA strand. The resulting fragments were next labeled by terminal deoxynucleotidyl transferase (TdT) using ThermoFisher's propriety DNA Labeling Reagent that is covalently linked with Biotin. Samples were then loaded onto the GeneChip for hybridisation via the conjugated biotin molecules. The GeneChip was put through a series of wash and staining steps before being scanned ready for image anaylsis. 
+
+Once the raw output data was returned from the sequencing company, it was be put through a series of stringent quality control steps. All further analysis was carried out on a desktop computer, making use of the R environment to run Oligo and Affy packages to process the raw .cel files \cite{10.1093/bioinformatics/btq431,10.1093/bioinformatics/btg405}. The first step in quality control assessment, is the generation of chip pseudo-images to shed light on potential inconsistencies on individual arrays (Figure ~\ref{fig:pseudoimagemicroarray}). A further quality control is to plot the distribution of the log base 2 intensities ($Log_{2}$(PM$\textit{ij}$) for array $\textit{i}$ and probe $\textit{j}$) of the perfect match probes, in order to compare probe intensity behaviour across the different arrays (Figure ~\ref{fig:microarray_global}). The shape and distributions of the intensities should all be relatively consistent across the different arrays, with any discrepancy indicating a potential source of error that requires additional normalisation. Box plots show the same differences in probe intensities across chips, however allow for a clearer the overall distribution than in the histograms; especially when assessing the effects of normalisation.
+
+There are several sources of potentially confounding noise in microarray experiments. There may be inconsistencies with the quantity of RNA used for hybridisation, subtle differences in hybridisation conditions, imperfections on the chip array surface, or an imperfect synthesis of the probes themselves. Any of these sources of noise may lead to the observation of differences between the arrays that are not reflective of biological variability, and therefore need to be removed in order to make accurate conclusions about the data. In order to normalise both within and across each chip, the Robust Multiarray Averaging (RMA) method was used. 
+
+The Robust Multiarray Averaging (RMA) method of normalisation makes use of only the Perfect Match (PM) probes, and performs a series of steps. Initially, a background correction is performed in order to correct for spatial variation within each individual array. This is achieved by calculating a background-corrected intensity for each PM probe to ensure all background corrected intensities are positive. It then makes a $Log_{2}$ transformation of the background corrected intensities to improve the distribution of the data in both up- and down-regulated directions. The $Log_{2}$ transformed data then undergoes a Quantile normalisation in order to correct for sources of noise across the arrays. This makes the expression data comparable between the arrays.
+
+
+\section{Results}
+
+\subsection{\textit{In Silico} Optimisation}
+
+\subsubsection{Comparison of Methods (\textit{n=3})}
+
+Once the software was run, a series of investigative plots were drawn in order to compare how accurate the various statistical tests were for that given synthetic dataset. These plots are displayed below as representative plots of 1 replicate out of 10. 
+
+In Figure ~\ref{fig:auc} a numerical representation of Receiver Operating Characteristics (ROC) curve is shown. Total area under the curve (AUC) tends towards a value of 1 as the test is better at detecting truly positive genes ahead of truly negative genes. This plot shows the total performance of each test, however indiscriminately towards alterations in true positive stringency. When the total plot is taken into account, EdgeR GLM marginally performs the best at a score of ~0.82. This is closely followed by DESeq2 and DESeq GLM at ~0.81. 
+
+\begin{figure}[!htbp]
+\centering 
+\includegraphics[width=0.9\textwidth]{chapter2/Insilico/auc-1.png} \\
+\caption[n=3 Area Under the Curve (AUC)]{Area Under the Curve (AUC)}
+\label{fig:auc}
+\end{figure}
+
+Figure ~\ref{fig:roc} shows a summary of ability of a test to rank truly positive genes (y-axis) ahead of truly negative genes (x-axis). A good test procedure maximises the area under the curve and tends towards the upper left of the plot. Here all tests perform similarly under these conditions. As the true positive rate is low (i.e. threshold for significance is more stringent) DESeq2 and Voom-Limma appear to show the lowest levels of false positive calling. As the true positive rate increases, however, EdgeR and NOISeq TMM appear to best mitigate false positive calling. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/rocone-1-1.png}
+  \caption[n=3 ROC Curves]{ROC Curves}
+  \label{fig:roc}
+\end{figure} 
+
+Figure  ~\ref{fig:fdr} represents a visual depiction of the number of false discoveries reported (y-axis) against a list of genes ranked for significance via their respective statistical test (x-axis). Hence, at any given position on the number of selected genes, the y-axis represents the number of truly non-differentially expressed genes that are ranked above that position. A good statistical test places few true negatives amongst the top-ranked genes, and therefore is shown by a curve tending to the bottom right of the plot with a slow rise on the y-axis. Here both DESeq2 and Voom-Limma perform the best, with the least number of false discoveries amongst their top ranked genes up until ~1250 genes; where all tests appear similar in their inability to exclude false negatives. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/fdcone-1-1.png}
+  \caption[n=3 False Discovery Curves]{False Discovery Curves}
+  \label{fig:fdr}
+\end{figure} 
+
+Further to the above, Figure ~\ref{fig:fdr1} is a representation of False discovery rate (FDR). This figure indicates the number of inaccurately called false positives amongst the genes predicted to be differentially expressed at an adjusted p-value threshold of 0.05 (dashed line). A good test should see the observed FDR close or below the imposed adjusted p-value threshold. Voom-Limma appears to perform below the adjusted value threshold of 0.05, with all others greatly over this threshold. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/fdr-1.png}
+  \caption[n=3 False Discovery Rate]{False Discovery Rate}
+  \label{fig:fdr1}
+\end{figure} 
+
+The total number of significant genes called with the adjusted p-value threshold of 0.05 is plotted in Figure ~\ref{fig:numbersig}. This is compared with the originally set number of genes to be significantly different between the two conditions when synthesising the dataset (10\% of total; 1250 Genes). The plot therefore is a measure of stringency alone. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/nbrsign-1.png}
+  \caption[n=3 Number of Significant Calls]{Number of Significant calls}
+  \label{fig:numbersig}
+\end{figure} 
+
+In Figure ~\ref{fig:spearman}, a comparison between the scores each differential expression method give to each gene. The Spearman’s correlation between scores returns a value between -1 and 1, with a high positive value of correlation coefficient indicating both methods similarly ranked genes. These comparisons are plotted as a heat map (index displayed). It appears that Voom-Limma shows the greatest difference between all of the other tests. Perhaps to be expected, EdgeR GLM and EdgeR exact show similar correlation. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/sorensen-1-1.png} 
+  \caption[n=3 Spearman Correlation Coefficient]{Spearman correlation between scores}
+  \label{fig:spearman}
+\end{figure} 
+
+The Matthew's Correlation Coefficient is a measure of performance summary by combining the number of observed; true positives, true negatives, false positives, and false negatives into a single metric (Figure  ~\ref{fig:mcc}). The coefficient is ranked from -1 to 1, with a value of 1 corresponding to a perfect classification and -1 corresponding to a completely inaccurate classification with regards to the true labels. Furthermore, on this scale a value of 0 corresponds with a random assignment of label. Here DESeq2 far outperforms the other tests in its ability to accurately reconcile all classification labels. Both Voom-Limma and the original iterations of DESeq performed the worst, with scores of around 0.23. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/mcc-1.png} \\
+  \caption[n=3 Matthew's Correlation Coefficient]{Matthew's Correlation Coefficient}
+  \label{fig:mcc}
+\end{figure} 
+
+
+
+
+\subsubsection{Comparison of replicate number - DESeq2}
+Based on the above metrics, DESeq2 was selected for further optimisation to see how it best performs given a variety of replicates. A similar series of plots to the comparison of DGE methods can be seen here. 
+
+Figure ~\ref{fig:auc_n} shows the AUC, based on the ROC curve outlined above. Here, the AUC metric appears similarly strong across all of the number of replicates tested, with an n=6/7 showing the strongest AUC. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/auc-1_compare_n.png} \\
+  \caption[DESeq2 Comparison of Replicates - Area Under the Curve (AUC)]{Area Under the Curve (AUC)}
+  \label{fig:auc_n}
+\end{figure}
+
+The false discovery rate between the samples with different replicates shows a predictable pattern, as increasing numbers of replicates lead to a significant reduction in FDR (Figure ~\ref{fig:fdr1_n}). This appears consistent, however the reduction in FDR between n=5 and n=6 is greater than the previous reductions. Furthermore, an interesting increase in FDR occurs between n=6 and n=7, showing n=6 to outperform n=7 within DESeq2. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/fdr-1_compare_n.png} 
+  \caption[DESeq2 Comparison of Replicates - False Discovery Rate]{False Discovery Rate}
+  \label{fig:fdr1_n}
+\end{figure} 
+
+Figure ~\ref{fig:numbersig_n} shows a steady and consistent increase in the number of significantly regulated genes called as the number of replicates is increased. The $\textit{in silico}$ generated dataset contained a predetermined number of 1,250 significantly regulated genes. With this in mind, the closest prediction was for the n=7 dataset at approximately 800 significant calls. 
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/nbrsign-1_compare_n.png} 
+  \caption[DESeq2 Comparison of Replicates - Number of Significant calls]{Number of Significant calls}
+  \label{fig:numbersig_n}
+\end{figure} 
+
+When these data are collated by use of the Matthew's Correlation Coefficient, an interesting result appears (Figure ~\ref{fig:mcc_n}). Contrary to expectation, an increase in replicate number does not equate to an overall better performance of the analysis. Here, the n=6 dataset marginally outperforms the n=7 dataset. It should be noted that this result is based purely on a single $\textit{in silico}$ generated dataset, with predetermined effect size, analysed with DESeq2 only. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \includegraphics[width=0.9\textwidth]{chapter2/Insilico/mcc-1_compare_n.png} 
+  \caption[DESeq2 Comparison of Replicates - Matthew's Correlation Coefficient]{Matthew's Correlation Coefficient}
+  \label{fig:mcc_n}
+\end{figure}
+
+Moving forward, it therefore appears that n=6 should provide a significant improvement in output for RNAseq experiments, whilst still ensuring the cost of the experiment does not become prohibitive.\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{RNAseq}
+
+\subsubsection{RNAseq n=3 vs n=6}
+
+As with the pipeline utilised for the n=3 dataset, the initial QC output was scrutinised to ensure there were no potential errors with the raw fastq files. Here, fastqc data are displayed for both the n=3 and n=6 datasets, in order to make an initial comparison between the output of the RNAseq experiments (Figure ~\ref{fig:n3vs6QCa}). 
+
+Ignoring the different read lengths between the two RNAseq outputs, the reads generated as part of the n=6 dataset are consistently much higher than those of the n=3 dataset (Figure ~\ref{fig:n3vs6QCa}). Furthermore, the levels of Phred score reduction across the read appear much less severe within the n=6 dataset. 
+
+This is further reflected within the Per Sequence Quality Scores, with the newer n=6 dataset showing a much higher number of reads with a phred score approaching 40 (Figure ~\ref{fig:n3vs6QCa}).
+
+The number of N calls per base are consistently low between both datasets, however those of the n=6 dataset are at no point visible as advancing over the x-axis across the read (Figure ~\ref{fig:n3vs6QCa}). The same cannot be said about the n=3 dataset, where the per base N content can be discerned from the x-axis. Regardless, this only ever accounts for a maximum of well below 1\% of the reads, and so is unlikely to affect the alignment to the reference genome and eventual differential expression calling for genes that are abundantly present in the samples. 
+
+The per sequence GC content sees the greatest level of improvement between the datasets (Figure ~\ref{fig:n3vs6QCa}). The distribution for the n=6 experiment is much more consistent and even, with the fastqc issuing a warning on reads rather than a failure (as denoted by the orange colour of the distributions, rather than the red). This is due to the sum of the deviations from the normal distribution representing more that 15\% of the reads. While this is not optimum, it does present a significant improvement over the n=3 experiment where the sum of deviations from the normal distribution being $>$30\%.
+
+The percentage of total sequences showing an over representation is markedly different between the two experiments (Figure ~\ref{fig:n3vs6QCa}). This is occurring despite comprehensive adapter trimming having taken place on both experimental outputs.
+
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cc}
+\small{N=3} & \small{N=6} \\
+\includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_3_fastqc_per_base_sequence_quality_plot.png} & \includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_6_fastqc_per_base_sequence_quality_plot.png} \\
+\includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_3_fastqc_per_sequence_quality_scores_plot.png} & \includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_6_fastqc_per_sequence_quality_scores_plot.png} \\
+\includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_3_fastqc_per_base_n_content_plot.png} & \includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_6_fastqc_per_base_n_content_plot.png} \\
+\end{tabular}
+\caption[RNAseq Quality Control Metrics]{RNAseq Quality Control Metrics, as generated by the FastQC package \cite{Andrews2010}. Here, Quality control metrics are displayed for both the n=3 and n=6 datasets, after adapter trimming has occured.}
+\label{fig:n3vs6QCa}
+\end{figure*}
+
+\begin{figure*}[!htbp]
+\ContinuedFloat 
+\centering
+\begin{tabular}{cc}
+\small{N=3} & \small{N=6} \\
+\includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_3_fastqc_per_sequence_gc_content_plot.png} & \includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_6_fastqc_per_sequence_gc_content_plot.png} \\
+\includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_3_fastqc_overrepresented_sequencesi_plot.png} & \includegraphics[width=0.5\textwidth]{chapter2/N3vs6/n_6_fastqc_overrepresented_sequencesi_plot.png} \\
+\end{tabular}
+\caption[RNAseq Quality Control Metrics. Continued.]{RNAseq Quality Control Metrics, as generated by the FastQC package \cite{Andrews2010}. Here, Quality control metrics are displayed for both the n=3 and n=6 datasets, after adapter trimming has occured.}
+\label{fig:n3QCb}
+\end{figure*}
+
+When the percentage of uniquely mapped reads are plotted for both Tophat and \acrshort{star}, a series of distinct patterns become apparent (Figure ~\ref{fig:mappingrate}). Most notably, the percentage of aligned reads for either alignment strategy are much greater for the new RNAseq experiment. When comparing alignment strategy within RNAseq experiments, a clear separation between Tophat and \acrshort{star} is observed in the n=6 experiment. Within the new cohort of samples, the average number of concordantly mapped reads increases from an average of approximately 60\% to just over 80\% alignment between Tophat and \acrshort{star} alignment strategies. \\
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{chapter2/N3vs6/ConcordantPairsMapped.pdf}
+\caption[Mapping levels between n=3 and n=6 RNAseq experiments0]{Levels of Concordantly mapped reads of both n=3 and n=6 run - Comparison between Tophat and \acrshort{star} aligners}
+\label{fig:mappingrate}
+\end{figure*}
+
+The PCA generated, as part of the DESeq2 package, shows the first two principal components to account for the majority of the variation observed between all four groups (Figure ~\ref{fig:PCA3vs9}). The greatest level of variance observed (PC1; 82\% Variance) clearly resolves between the old and new sequencing experiments. The second largest variance (PC2; 11\% Variance), resolves between the WKY and SHR strains, regardless of the batch from which they originate. Furthermore, each individual group shows an incredibly tight clustering, showing the majority of the variance is accounted for by either strain or batch.
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=1.0\textwidth]{chapter2/N3vs6/WKY_vs_SHR-PCA.pdf}
+\caption[PCA Plot featuring Previous n=3 RNAseq and current n=6 RNAseq experiments]{\acrfull{pca} Plot featuring Previous n=3 RNAseq and current n=6 RNAseq experiments. Sample colours are grouped by experiment and strain.}
+\label{fig:PCA3vs9}
+\end{figure*}
+
+Figure ~\ref{fig:FCvsFC} shows a scatter plot of DESeq2 predicted $Log_{2}$ fold changes of all genes with a multiple test corrected P-Value $<$0.05. A linear regression analysis shows the correlation between the $Log_{2}$ Fold changes of both datasets with the corresponding; slope coefficient, $R^{2}$, and 95\% Confidence interval (CI) values displayed. A high level of concordance appears between the values of each dataset, with the n=3 dataset showing a slightly elevated $Log_{2}$ fold change per gene as compared with the n=6 dataset. \\
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{chapter2/N3vs6/DESeq2SigLog2FCComparison.pdf}
+\caption[DESeq2 Generated $Log_{2}$ Fold Changes between n=3 and n=6 RNAseq Datasets]{Scatter Graph representation of DESeq2 significant (P-Value$<$0.05) $Log_{2}$ Fold Changes across n=3 and n=6 RNAseq experiments}
+\label{fig:FCvsFC}
+\end{figure*}
+
+The total output for the new n=6 \acrshort{dge} analysis is displayed in Table ~\ref{fig:n6RNAseq}. Table ~\ref{tab:n6RNAcandidates} represents a curated version, displaying only the original candidate genes along side their associated qPCR validation values.
+
+\begin{sidewaystable}[!htbp]
+\scriptsize
+\centering
+\begin{tabular}{llrrrr|rr}
+                   &                   & \multicolumn{4}{c}{\textbf{DESeq2}}                                                                                    & \multicolumn{2}{c}{\textbf{qPCR}}\\
+\textbf{}          & \textbf{GeneName} & \textbf{FC} & \textbf{P-Value (Adjusted)} & \textbf{WKY.Avg} & \textbf{SHR.Avg} &   \textbf{FC}  & \textbf{P-Value}\\
+\hline
+ENSRNOG00000013538 & Capza1            & 0.98                          & 0.97                        & 816.72                     & 804.06                     & 1.1   & 0.60 \\
+ENSRNOG00000019050 & Ifit1             & 165.65                           & 7.17E-148                   & 73.56                      & 12195.78                   & 63.51 & $<$0.0001 \\
+ENSRNOG00000025108 & Ankrd35           & 69.48                           & 4.27E-06                    & 4.75                       & 330.46                     & 3.68  & 0.0005\\
+ENSRNOG00000001242 & Gstt3             & 34.49                           & 3.28E-94                    & 25.46                      & 883.96                     & 28.47 & $<$0.0001 \\
+ENSRNOG00000008364 & Cat               & 1.13                           & 0.44                        & 31846.01                   & 36123.92                   & 1.6   & 0.09\\
+ENSRNOG00000051682 & Zcchc9            & 4.84                           & 1.70E-17                    & 55.94                      & 269.35                     & 6.67  & $<$0.0001\\
+\hline
+ENSRNOG00000053450 & Myadm             & 0.51                          & 1.32E-12                    & 999.85                     & 508.76                     & 1.35  & 0.04\\
+ENSRNOG00000003977 & Dusp1             & 0.33                          & 9.36E-15                    & 945.37                     & 315.07                     & 0.34  & 0.0051\\
+ENSRNOG00000004206 & Glrx5             & 0.40                          & 4.06E-37                    & 51025.59                   & 20203.56                   & 1.01  & 0.96\\
+ENSRNOG00000021106 & Gramd1a           & 1.32                           & 0.04                        & 445.87                     & 590.12                     & 1.58  & 0.003\\
+ENSRNOG00000020938 & Ppp1r15a          & 1.41                           & 5.60E-05                    & 5002.49                    & 7034.93                    & 1.09  & 0.64\\
+ENSRNOG00000013631 & Slc31a2           & 1.57                           & 0.77                        & 16.75                      & 26.43                      & 0.96  & 0.44
+\end{tabular}
+\caption[Comparison of RNAseq Output with qPCR Validation on Candidate Biomarkers]{Comparison of RNAseq Output with qPCR Validation on Candidate Biomarkers. For each candidate gene, Ensembl Gene IDs are shown, alongside the DESeq2 raw output for \acrshort{dge} analysis. The full table has been amended to include; Fold Change (FC), P-Value (Benjamini-Hochberg Multiple test corrected), and mean counts for each group. Also displayed are the FC and associated P-Values for the qPCR analysis.}
+\label{tab:n6RNAcandidates}
+\end{sidewaystable}
+
+Figure ~\ref{fig:upsetr} shows an UpsetR generated plot of DESeq2 significant (P-Value $<$0.05) genes for both the n=3 and n=6 datasets. Each dataset is split into positively (i.e. upregulated in the SHR as compared with the WKY) and negatively (i.e. downregulated in the SHR) regulated genes. These total set sizes are displayed on the bottom left x-axis. Intersections of conserved genes are then displayed by use of individual nodes along the main x-axis, with the number of genes common to the highlighted nodes displayed along the y-axis (as denoted by the "Intersection Size"). Highlighted in orange and blue are the shared nodes for downregulated and upregulated in both n=3 and n=6 datasets respectively. The greatest level of overlap in DESeq2 significant genes, is within the downregulated genes (321 conserved genes) compared with the upregulated genes (125 conserved genes). \\
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=1\textwidth]{chapter2/N3vs6/All_UpsetR.pdf}
+\caption[UpsetR Generated comparison of DESeq2 significant genes (P-Value$<$0.05) between n=3 and n=6 RNAseq]{UpsetR Generated comparison of DESeq2 significant genes (P-Value$<$0.05) between n=3 and n=6 RNAseq experiments; separated by direction of change. Total set sizes are displayed in the bottom left x-axis, and sets being compared are designated by highlighted nodes across the main x-axis. The number of genes individual to a set, or conserved across multiple are denoted by the nodes highlighted and the corresponding "Intersection Size" on the y-axis.}
+\label{fig:upsetr}
+\end{figure*}
+
+
+\subsection{Microarray}
+
+\subsubsection{Quality Control}
+
+The R-generated pseudo-images showed a consistent patterning of intensities across all arrays, except for WKY5 which showed a circular artefact of increased intensity (Figure ~\ref{fig:pseudoimagemicroarray}). The uniform nature of the artefact suggested it was an error with the manufacture of the chip itself. For this reason, this microarray sample was repeated, with the repeated array showing no such artefact. \\
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.4\textwidth]{chapter2/Microarray/image10.jpg} & \includegraphics[width=0.4\textwidth]{chapter2/Microarray/image11.jpg} \\
+\end{tabular}
+\caption[Quality control generated Pseudo-images of Microarray Gene Chips]{Quality control generated Pseudo-images of Microarray Gene Chips of sample WKY4 (left) and WKY5 (right). Here, a clear artefact can be seen in the WKY5 sample in the shape of a ring around the chip. The artefact appears to be a defect within the gene chip, and one that was possibly the result of a loading or manufacture error. This sample was subsequently re-ran before inclusion in the experiment.}
+\label{fig:pseudoimagemicroarray}
+\end{figure*}
+
+Once the array for WKY5 was rerun, a histogram representation of Log intensities across each array was produced (Figure ~\ref{fig:microarray_global}). Here, each sample shows a consistent distribution. This was therefore not indicative of any sample requiring an over normalisation or to be omitted all together. 
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{chapter2/Microarray/Histogram_Global.pdf}
+\caption[Global Histogram of Microarray Intensities]{Histogram showing the Log intensities across the chip for all arrays. Here a uniform distribution of intensities across can be seen across all chips. Therefore, this \acrshort{qc} metric does not highlight any causes for concern at this stage of the QC pipeline.}
+\label{fig:microarray_global}
+\end{figure*}
+
+The boxplots of the $log_{2}$(PM$\textit{ij})$ intensities and the \acrshort{rma} normalised $log_{2}$(PM$\textit{ij})$ intensities reveal an uneven distribution between each of the samples (Figure ~\ref{fig:microarrayboxplot}). This is most notable for sample SJ1 and WJ5, whose interquartile range appear truncated compared with the other samples. These intersample differences in $log_{2}$(PM$\textit{ij})$ intensities are no longer perceivable after \acrshort{rma} normalisation. The  global distributions therefore all appear comparable. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \begin{tabular}{cc}
+  \includegraphics[width=0.45\textwidth]{chapter2/Microarray/raw_boxplot.png} & \includegraphics[width=0.45\textwidth]{chapter2/Microarray/norm_boxplot.png}\\
+\end{tabular} 
+  \caption[Boxplots of $log_{2}$(PM$\textit{ij}$) intensities for both pre- and post RMA normalisation]{Boxplots of $log_{2}$(PM$\textit{ij}$) intensities for both pre- and post RMA normalisation.}
+  \label{fig:microarrayboxplot}
+\end{figure}
+
+A \acrshort{pca} was conducted to better assess for any overarching dimensions of noise apparent in the data, and to see whether or not they align with the experimental design (Figure \ref{fig:microarraypca}). The \acrshort{pca} of the raw intensities shows the first principal component (i.e. the greatest dimension of variability; x-axis), to account for 67.4\% of the total variation. Across this axis, the individual samples are resolved, leading to the conclusion that the greatest source of variation in the raw intensities is due to biological variability. This pattern can be observed regardless of the strain to which the samples belong. The second principal component (y-axis) accounts for 8.65\% of the variation, and shows a clear resolution between the two strains across this axis. 
+
+This pattern is relatively conserved after \acrshort{rma} normalisation, however there is no longer a clear separation between the strains across the second principal component (y-axis; 4.83\%). This dimension of variability has been normalised against, whereas the first principal component now accounts for a greater percentage of the global noise (x-axis; 74.48\%). Across this axis, samples are separating based on biological or technical noise. \\
+
+\begin{figure}[!htbp]
+\centering 
+\begin{tabular}{c}
+\includegraphics[width=0.57\textwidth]{chapter2/Microarray/WKYVSSHR-Microarray_Raw_PCA.pdf} \\
+\includegraphics[width=0.57\textwidth]{chapter2/Microarray/WKYVSSHR-Microarray_Norm_PCA.pdf}\\
+\end{tabular} 
+\caption[Principal Component Analysis for both pre- and post RMA normalisation]{Principal Component Analysis for both pre- and post RMA normalisation. The greatest source of noise (PC1) appears to resolve the biological replicates, regardless of strain (Raw, 67.4\%; RMA Normalised, 74.48\%). The second principal component (PC2) separates the strains. The raw PCA shows a robust separation across the strain, which appears to be normalised for in the RMA normalised PCA (Raw, 8.65\%; RMA Normalised, 4.83\%).}
+\label{fig:microarraypca}
+\end{figure}
+
+\subsubsection{Differential Expression Analysis}
+
+From Thermofisher's Transcriptome Analysis Console (TAC, ThermoFisher Scientific) generated \acrshort{dge} table, a total of 68,011 transcript elements were detected. Of this total, 832 reached a multiple test corrected (\acrshort{fdr}) P-Value$<$0.05. This total list of transcript elements comprised of 24,753 transcripts designated as "Coding", of which 442 reached a \acrshort{fdr} P-Value$<$0.05 (Table \ref{fig:n6Microarray}). A curated form of the final \acrshort{dge} output from Thermofisher's \acrfull{tac} software for candidate genes is displayed in Table ~\ref{tab:Microcandidates}.
+
+\begin{sidewaystable}[!htbp]
+\scriptsize
+\centering
+\begin{tabular}{lrrrrrrr|rr}
+\textbf{}            & \multicolumn{7}{c}{\textbf{Microarray}}                                                                                                             & \multicolumn{2}{c}{\textbf{qPCR}}\\
+\textbf{Gene} & \textbf{WKY.Avg (log2)} & \textbf{WKY SD} & \textbf{SHR.Avg (log2)} & \textbf{SHR SD} & \textbf{FC} & \textbf{P-Value} & \textbf{FDR P-Value}  & \textbf{FC}  & \textbf{P-Value}\\
+\hline
+Capza1               & 9.34                    & 0.08            & 9.36                    & 0.30            & 1.01                 & 0.97           & 1.00                & 1.1   & 0.60 \\
+Ifit1                & 5.86                    & 0.58            & 19.93                   & 0.00            & 17179.20             & 2.31E-14       & 0.00                & 63.51 & $<$0.0001 \\
+Ankrd35              & 4.11                    & 0.06            & 4.61                    & 0.09            & 1.41                 & 6.24E-07       & 0.00                & 3.68  & 0.0005\\
+Gstt3                & 5.27                    & 0.11            & 6.69                    & 0.14            & 2.67                 & 6.18E-09       & 0.00                & 28.47 & $<$0.0001\\
+Cat                  & 19.93                   & 0.00            & 19.93                   & 0.00            & 1.00                 & 1.00           & 1.00                & 1.6   & 0.09\\
+Zcchc9               & 4.84                    & 0.13            & 6.77                    & 0.17            & 3.80                 & 9.67E-10       & 0.00                & 6.67  & $<$0.0001\\
+\hline
+Myadm                & 7.73                    & 0.24            & 6.96                    & 0.23            & 0.59                 & 3.00E-04       & 0.03                & 1.35  & 0.04\\
+Dusp1                & 8.02                    & 0.57            & 6.39                    & 0.63            & 0.32                 & 3.00E-04       & 0.03                & 0.34  & 0.0051\\
+Glrx5                & 6.27                    & 0.08            & 6.15                    & 0.06            & 0.92                 & 3.60E-03       & 0.17                & 1.01  & 0.96\\
+Gramd1a              & 4.93                    & 0.00            & 4.93                    & 0.06            & 1.00                 & 0.44           & 0.84                & 1.58  & 0.003\\
+Ppp1r15a             & 7.60                    & 0.07            & 7.85                    & 0.20            & 1.20                 & 0.01           & 0.27                & 1.09  & 0.64\\
+Slc31a2              & 4.10                    & 0.00            & 4.08                    & 0.05            & 0.99                 & 0.44           & 0.84                & 0.96  & 0.44
+\end{tabular}
+\caption[Comparison of Microarray Output with qPCR Validation on Candidate Biomarkers]{Comparison of Microarray Output with qPCR Validation on Candidate Biomarkers. For each of the candidate genes, raw microarray output is shown from the \acrfull{tac} software (Thermofisher$\textsuperscript{\textregistered}$). Output has been curated to only show pertinent columns, including; $log_{2}$ Average signal per group, accompanying standard deviation (SD), fold change (FC), P-Value, and \acrshort{fdr} corrected P-Value. Also displayed are the FC and P-Values from qPCR analysis.}
+\label{tab:Microcandidates}
+\end{sidewaystable}
+
+In Figure \ref{fig:microarrayvolcano}, the entire detected transcriptome is displayed in scatter and volcano plots. Each punctum denotes an individual transcript, with puncta highlighted in red as being significantly upregulated, and those highlighted in green significantly downregulated. Also highlighted here in the red circle, is the Ifit1 transcript; one of the most significantly upregulated genes in the n=3 RNAseq dataset that was validated through qPCR analysis. The scatter plot shows a greater level of genes to be upregulated in the \acrshort{shr} than downregulated. The volcano plot illustrates the greater level of these upregulated transcripts in reaching P-Value significance. \\
+
+\begin{figure}[!htbp]
+  \centering 
+  \begin{tabular}{cc}
+  \includegraphics[width=0.45\textwidth]{chapter2/Microarray/SHRvsWKY_Scatter.png} & \includegraphics[width=0.45\textwidth]{chapter2/Microarray/SHRvsWKY_Volcano.png}\\
+\end{tabular} 
+  \caption{Scatter and Volcano plots of Microarray results}
+  \label{fig:microarrayvolcano}
+\end{figure}
+
+\section{Discussion}
+
+\subsection{\textit{In Silico} Optimisation}
+\subsubsection{Comparison of Methods}
+
+In an attempt to build upon the previously obtained n=3 RNAseq dataset, and mitigate the high \acrshort{fdr} observed, an \textit{In Silico} generated dataset was created. Using the n=3 dataset as a foundation, the parameters of the \textit{in silico} dataset were set in order to best emulate the results of the biologically generated dataset. Unlike a biologically derived RNAseq output, the precise expression values of each gene are predetermined, allowing for a precise correlation to be drawn between the actual and predicted \acrshort{dge}. 
+
+With this in mind, CompcodeR was able to produce a series of performance benchmarks for each of the statistical \acrshort{dge} tools. With 3 replicates, and averaged over 10 randomly generated datasets (whilst still maintaining the same parameters outlined in Table \ref{table:compcodeRsettings}), the majority of the tests appeared consistent in their overall performance. The main benchmarks that saw a separation in the tool's performance were; the number of significant calls, the false discovery rate, and the Matthew's Correlation Coefficient.  
+
+The \acrshort{fdr} not only varied greatly between the various \acrshort{dge} tools tested, but within the replicated datasets assessed. Some of the tools showed a great spread in the \acrshort{fdr} report, such as NOISeq, and DESeq. By far the best performing tool was limma-voom with TMM normalisation. However, this was due to the hugely stringent nature of its analysis as it predicted the lowest number significantly regulated genes by a large margin. 
+
+There was a great disparity in the number of genes predicted to be significantly regulated by the various \acrshort{dge} tools. Interestingly, DESeq2 was markedly more stringent then EdgeR in the n=3 (Section \ref{chapter1diffexp}; DESeq2 P-Value$<$0.05, 691 transcripts; EdgeR P-Value$<$0.05, 1,821 transcripts). However, here DESeq2 consistently predicted the greatest number of significantly regulated genes, with this number being closest to the true number of regulated genes.
+
+In an attempt to curate these findings, and integrate them into an overall performance benchmark, a \acrshort{mcc} was conducted. The \acrshort{mcc} takes into account both the true and false positives and negatives, and provides a metric that is generally regarded as balanced (Figure \ref{mcc_calc}). The produced coefficient ranges from -1 to 1, with a score of 1 denoting a completely correct binary classifier. Here, DESeq2 performs markedly better, with a series of \acrshort{mcc} scores between 0.45 and 0.5.
+
+\begin{figure}
+\[MCC = \frac{\left ( TP \times TN \right) - \left ( FP \times FN \right )}{\left [ \left ( TP + FP \right ) \times \left ( FN + TN \right ) \times\left ( FP + TN \right ) \times \left ( TP + FN \right )\right ]^{^{\frac{1}{2}}}}\]
+\normalsize
+\begin{align*}
+\text{Where;} ~TP &= \text{True Positives} \\
+~TN &= \text{True Negatives} \\
+~FP &= \text{False Positives} \\
+~FN &= \text{False Negatives} \\
+\end{align*}
+\caption{Equation for calculating the \acrfull{mcc}. The \acrshort{mcc} serves to produce a metric that integrates all of the logical outcomes from the RNAseq predictions.}
+\label{mcc_calc}
+\end{figure}
+
+It should be noted that each iteration of a synthetic dataset will subtly change based on the random algorithms employed in the \textit{generateSyntheticdata} command. This will therefore subtly influence the various comparisons drawn above. Whilst the attempt was made to mitigate this by running several synthetic datasets through this comparative software, each run in trialing this software has been sufficient to reliably rank each test on any given metric such that its position remains uninfluenced. For that reason, a single generated dataset can suffice in allowing the assessment of these tests as there is less concern with the absolute values they gain, rather how they perform against each other. 
+
+What is clear from these comparisons, is just how varied each strategy is in its strengths and weaknesses. No one test appears to outperform the rest across all benchmarks. However, it does appear that DESeq2 best resolves the relationship between false and true calls towards significantly regulated genes. For this reason, further optimisation made use of the DESeq2 \acrshort{dge} prediction software. 
+
+\subsubsection{Comparison of replicate number - DESeq2}
+
+Based on the subtle performance differences across the DGE statistical approaches, coupled with the literature, DESeq2 was selected to further optimise the number of replicates required. 
+
+From the CompcodeR datasets, increasing the number of replicates resulted in a consistently increasing number of significantly regulated gene predictions. This follows an expected pattern as an increase in replicates gives rise to a more accurate estimation of the sample distribution. This in turn leads to a greater statistical sensitivity in detecting truly regulated genes. 
+
+The key issue with the n=3 dataset was the high \acrshort{fdr}. Interestingly, based on the simulated data 6 replicates leads to the lowest \acrshort{fdr} by DESeq2. Moreover, this observation was strong enough to lead to a consistent result within the \acrshort{mcc} benchmark as n=6 outperforms the n=7 based on \acrshort{mcc}, contrary to expectation.
+
+For the comparison of replicate numbers, a single replicate was generated for each DESeq2 analysis. The compcodeR \textit{generateSyntheticdata} command works by modeling gene counts from a Negative Binomial distribution, using mean and dispersion parameters obtained from previously obtained RNAseq gene expression data \cite{Soneson2013}. A random variable is generated to represent the gene counts for this model, in conjunction with the key parameters outlined in Table \ref{table:compcodeRsettings}. It is this random variable that will lead to interexperimental noise in gene expression counts between \textit{generateSyntheticdata} generated data, much in the same way biological noise affects expression distributions. It is likely this noise is the cause for any discrepancies observed within the comparisons. This could be mitigated by replicating the replicates, and generating a larger series of datasets to be cycled through for any given replicate number to be tested.
+
+Furthermore, it should be noted that there may be gains in performance between the different DGE statistical approaches, as the number of replicates is increased. Here, only DESeq2 was benchmarked with different numbers of replicates. For this reason, a more comprehensive assessment could be ran to iteratively compare all of the DGE approaches available, with several permutations of replicates. 
+
+It would be possible to run this \textit{In Silico}, however this has previously been performed with experimentally generated RNAseq data, as outlined in section ~\ref{False Discovery Rate}. Here, the focus was given to an \textit{In Silico} generated dataset, with selected parameters to best mirror the results observed in the original n=3 dataset as no other biological proxy was not available.
+
+Furthermore, running the analysis with additional replicates greater than 7 may shed light on the optimum number of replicates to accurately call this particular number of regulated genes, however given the increasing cost of additional replicates, this trade off may not be required for the generation of a candidate list of biomarkers.
+
+For these reasons, and the findings of the high throughput studies mentioned in section \ref{Comparison of RNAseq and qPCR output}, 6 replicates per group were selected for use in a repeat of the \acrshort{wky} and \acrshort{shr} blood transcriptome comparison. 
+
+\subsection{RNAseq}
+
+\subsubsection{n=3 vs n=6 Datasets}
+
+The fastqc output for both the n=3 and n=6 RNAseq experiments presented a series of metrics by which a comparison could be drawn between the raw fastq files of each. It is the first step after sequencing, and already shows a series of interesting differences between the experiments. 
+
+The first, and arguably most important metric of raw fastq files, was the quality of base calling from the sequencer itself. In other words, the accuracy of each base call as measured by the Phred score. Comparing across the different RNAseq experiments reveals an interesting difference between the consistency of average Phred scores across each read. The n=3 reads show a steady fall in Phred score across the read, whereas those from the n=6 experiment are consistently high. This observation could be resultant of two factors; the sequencing technology used, and the length of the reads generated. 
+
+The first potential cause of this difference, is the length of reads being used. The n=3 experiment used 2x100bp reads, whereas the n=6 dataset used much shorter 2x75bp reads. Due to the phenomenon of phasing, outlined in section ~\ref{Trimming} of the introduction, average read quality will always tend to decrease as the reads get longer. Therefore longer reads, such as those generated in the n=3 dataset, are much more susceptible to this reduction in base calling accuracy. Of course the shorter read length comes with the caveat of reduced information. This is a concern when this additional information is required for a per base resolution required for focusing on single nucleotide polymorphism (SNPs). Here, this loss of resolution is acceptable as the focus is given to whole transcripts whose expression is modified between the model organisms being studied. 
+
+Year on year, subtle improvements are being made to all next-generation sequencing platforms. Most notably with Illumina's sequencing by synthesis technology, improvements to the sequencing chemistry and the methods of detection are constantly resulting in increasing accuracy to base calls. Here, the n=3 dataset was generated with the HiSeq2500 (Illumina, Inc. - San Diego, CA, USA), a platform that was released in 2012. The n=6 experiment was conducted on the HiSeq4000; a platform released 3 years later in 2015. This difference in time translates to a great increase in base call accuracy. One of the most notable improvements to Illumina's approach is the transition from standard flow cells to "Patterned" flow cells, as used in the HiSeq4000 (Figure \ref{fig:patterned}). Patterned flow cells contain billions of nanowells at fixed locations across both surfaces of the flow cell. This structured organisation leads to an even spacing of sequencing clusters across the the cell, enabling a clearer detection of bases from each cluster and mitigating the previous need to map cluster sites. This results in higher Phred Q-Scores and a quicker run time \cite{patterned}.
+
+\begin{figure}[!htbp]
+  \centering 
+  \begin{tabular}{c}
+  \includegraphics[width=0.9\textwidth]{chapter2/N3vs6/patternedflowcell.jpg} \\
+\end{tabular} 
+  \caption[Illustration of Illumina's Patterned Flow Cell Technology]{Illustration of Illumina's Patterned Flow Cell Technology. Each flow cell contained billions of nanowells, each forcing clustering to follow an ordered spacing. This translates to improved confidence in base calling due to the lack of overlapping signals being produced.}
+  \label{fig:patterned}
+\end{figure}
+
+One of the main differences between the n=3 and n=6 RNAseq experiments with regards to QC output, was the greatly differing GC content per sequence. FastQC issued a complete failure for the n=3 reads due to the sum of the deviations being $>$30\%. This was not the case for the n=6 experiment, where only a warning was issued (based on the FastQC threshold of $>$15\%). The main reasoning behind this could be the improved approach towards good laboratory practice, where potential contaminants were successfully avoided.
+
+Another large discrepancy between the experiments was the difference in overrepresented sequences. This appears to be resultant of the method in which the libraries were prepared. The n=3 experiment made use of ribosomal RNA depletion, whereas the n=6 used poly(A) selection. This seemingly subtle difference in obtaining \acrshort{mrna} transcripts translates to a significant difference in the output of libraries for sequencing. Following a nBLAST of the sequences flagged as being overrepresented, the majority of those observed in the n=3 dataset were found to be \acrshort{rrna} or mtRNA in nature. This is due to the method of \acrshort{rrna} depletion's inability to efficiently remove all \acrshort{rrna} from the sample before sequencing. As with any molecular protocol there will never be a 100\% recovery or depletion of a molecular target, meaning several \acrshort{rrna} transcripts will remain in the library for sequencing.
+
+This problem is mitigated by the Poly(A) selection method, as even a suboptimal recovery of the total poly-adenylated \acrshort{mrna} population will still be relatively devoid of \acrshort{rrna}. This way, the finite amount of RNAseq reads per flow cell can be utilised for identifying protein-coding genes. Of course this prevents the discovery of novel non-coding transcripts that are increasingly found to have a profound regulatory role in biology \cite{Hube2018}. However, here the focus is on protein coding transcripts, and so the Poly(A) selection method presents the best option for moving forward.
+
+The decision was made to optimise the step of read alignment, in order to tease out the greatest level of information regarding gene expression from the data. Here, the previous pipeline for the n=3 dataset made use of the Tophat read alignment algorithm. The newer \acrfull{star} algorithm was selected to compare Tophat against. When assessing the alignment rates between Tophat and \acrshort{star}, the Original and New experiments must be taken in isolation as different experimental approaches, including the differing library preparations, will translate to differences in reads produced and ultimately how they are aligned. Taking the new n=6 dataset in isolation, a clear separation in concordant alignment rates is observed between Tophat and \acrshort{star}. The writers of the \acrshort{star} algorithm claim a higher level of sensitivity, while maintaining a low false-positive rate, due to the way in which \acrshort{star} processes reads \cite{Dobin2012}. 
+
+As part of its approach, \acrshort{star} can be split into two distinct phases of alignment; seed searching, and clustering/stitching/scoring. The initial phase involves taking each read and searching for the longest sequence that it can match in one or more locations on the reference genome. The longest perfect match becomes known as the \acrfull{mmp}. The aspects of the reads that can be mapped separately are referred to as "seeds", so the first \acrfull{mmp} becomes \textit{seed1}. \acrshort{star} then searches for the remainder of the read to find the next \acrshort{mmp} which it terms \textit{seed2}. Each \acrshort{mmp} search is conducted in both forward and reverse directions, facilitating a better ability to find anchors for reads the contain errors towards their ends, improving mapping sensitivity for higher sequencing error rate conditions. 
+
+The second part of \acrshort{star}'s approach takes all of the generated seeds and stitches them together by grouping all seeds that are not multimapping, terming them 'anchor' seeds. These are used for producing the final alignments. The algorithm importantly clusters seeds from the mates of paired-end RNAseq reads, using each paired-end read as a single sequence. This allows for a possible genomic gap, or an overlap between the inner ends of the paired-end mates. It is this principled usage of paired-end data that leads to a further increased sensitivity towards read alignment.  
+
+A detailed comparison, conducted in 2017 by Costa-Silva \textit{et al.}, took two human RNAseq datasets and ran them through a permutation of \acrshort{dge} pipelines. As part of this study, six methods of mapping reads were used, including Tophat and \acrshort{star}. Based on a series of benchmarks, including total number of significant calls and concordance with qRT-PCR data, the group concluded that the method by which the reads were initially aligned did little to impact on the final analysis \cite{10.1371/journal.pone.0190152}. 
+
+However, it seems unlikely that such a large difference between the concordantly mapped pairs, observed here between Tophat and STAR, would not translate to important differences in eventual \acrshort{dge} results. As the paper does not declare the mapping rates for each of the sequence aligners used, it is not possible to see whether any discrepancies in alignment rate are apparent or indeed whether they are comparable to those observed here. Due to the higher levels of concordantly aligned reads \acrshort{star} presents the best way in which to proceed for an optimised RNAseq pipeline. 
+
+The differences observed within the QC metrics previously discussed are all methods of assessing the suitability of the raw reads for eventual differential expression analysis. Therefore, regardless of whether they pass or fail these metrics, robustly regulated genes may still ultimately surface to be predicted as significantly regulated.
+
+A good way in which to further probe the data, and assess for levels of noise arising from differing expression values, is to conduct a principal component analysis (PCA). Here, an interesting series of observations can be made. The first observation, is that of the first principal component which appears to best resolve between the n=3 and n=6 datasets. This means that the global noise, irrespective of source, is due to batch effects observed between the two experiments. While from the same biological strains at comparable ages, these samples have been subjected to completely different library preparations and processing pipelines. Therefore, it is not surprising that batch effects represent a greater source of variability than the differences between the strains themselves. 
+
+\subsection{MicroArray}
+
+For this experiment, RMA was used to normalise the data at the beginning of the pipeline. It is possible to use other methods of microarray normalisation, such as the Gene-Chip RMA (GCRMA). GCRMA is an expansion on RMA, with the only difference being the internal correcting for non-specific binding to the probes, contrary to the RMA approach which does not factor in the issue of non-specific binding. It does this by using the probe sequence information to estimate a ratio of probe affinity to non-specific binding. During a series of pilot experiments, the developers of the algorithm determined the contributions of each nucleotide on each position of the probes, making use of artificial DNAs that mismatched at specific positions \cite{doi:10.1198/016214504000000683}. As there was no specific binding within this experiment, the only intensities measured were those resulting from mismatching. This enabled the team to estimate the affinities of each of the probes. GCRMA can either use this experiment as a reference, or compute new probe affinities based on the negative control probes of the specific array used.
+
+Here, the RMA approach was sufficient to produce a normalised dataset for use in differential gene expression analysis. All QC output observed was based on this approach, with RMA appearing to adequately normalise the global data expression ranges. A repeated analysis could be ran using the GCRMA approach to account for the non-specific binding, however this comparison is beyond the scope of this thesis, and the lower level of normalisation (RMA) has already demonstrated the microarray approach to be suitable for differential expression analysis in this context.
+
+\subsection{RNAseq vs MicroArray} \label{RNAseq vs MicroArray}
+
+Interestingly, the microarray dataset presented no false positives, and so had a \acrshort{fdr} of 0\%. While this is a large reduction in \acrshort{fdr} from the n=6 RNAseq dataset, microarray as a technology is still prohibitive for downstream analysis. The slightly higher \acrshort{fdr} observed in the DESeq2 analysed n=6 RNAseq data (0.28\%), is an acceptable trade-off when considering the additional benefits RNAseq offer. Through the very nature of RNAseq's sequencing by synthesis, one of the key advantages of RNAseq is its ability to differentiate the expression abundances of individual isoforms of transcripts. Moreover, if a library is sequenced with a sufficient read depth, discrepancies in reads at the base resolution can aid in \acrfull{snp} discovery. Furthermore, and providing the use of a well annotated reference genome such as here with the $\textit{Rattus norvegicus}$, interpretation of read counts is intuitively simple compared to the intensities given by microarray chips \cite{10.1371/journal.pone.0190152}. These additional advantages allow RNAseq technology to take this research from biomarker discovery to biomarker characterisation. For this reason, RNAseq will be used as the foundation of biomarker discovery moving forward. 
+
+It is worth noting that here 12 genes were selected for validation of the RNAseq and Microarray datasets. This number represents a modest fraction of total genes to validate such high-throughput methods as RNAseq and Microarray. In order to gain additional confidence in each dataset's \acrshort{fdr}, and by extension their validity as a whole, additional candidates must be validated with qPCR technology. Individual transcript qPCR analysis is time consuming, as primers must be designed and validated before using to assess individual transcript expression across replicates.
+
+A commercially available qPCR plate array would allow for a much greater number of transcripts to be analysed in a high-throughput manner. Furthermore, each of the primers are previously optimised and need to meet the stringent performance standards that follow the \acrfull{miqe} guidelines \cite{10.1371/journal.pone.0190152}. These plates do come at a much greater cost, however this approach would greatly reduce the time taken to validate high-throughput transcriptome analyses, and provide a series of expression metrics from an entirely separate technology. The completely different experimental pipeline, and the high-throughput approach, could provide a standard workflow to be conducted side by side with RNAseq/Microarray analysis, ultimately leading to a final sequencing dataset with a much greater level of confidence. At the time of writing, Thermofisher$\textsuperscript{\textregistered}$ offer 842 TaqMan$\textsuperscript{\textregistered}$ Gene expression assays for Rat alone (86 when applying the search term of "blood"). With this specific project in mind, the TaqMan$\textsuperscript{\textregistered}$ Array Rat Hypertension 96-well plate (Array ID; RAWCWC9) would be an ideal starting point for blood specific expression assay.
+
+\subsection{Concluding remarks}
+
+This chapter has allowed for a much greater understanding the potential pitfalls of high-throughput data, and has indeed been successful in mitigating many of these. Through a variety of changes to the RNAseq pipeline, including; a new library preparation method, additional replicates, and a modified analysis pipeline, a much more established foundation can be lay for biomarker discovery. 
+Here, and regardless of the technology used, the Ifit1 transcript saw a the most robust increase in the blood of the pre-hypertensive \acrshort{shr} compared with the normotensive \acrshort{wky}. This increase was further validated through qPCR in section \ref{candidatesqpcr}. Due to this huge increase, focus will be given to better understanding this particular transcript's expression profile within this model of hypertension.
+
+
+
+
+
+

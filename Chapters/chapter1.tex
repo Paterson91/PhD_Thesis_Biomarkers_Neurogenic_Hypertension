@@ -1,0 +1,525 @@
+\doublespacing
+
+\section{Introduction}
+
+In order to begin the search for potential biomarkers of hypertension, RNAsequencing can provide a key overview of transcriptomic changes between normotensive and hypertensive rat strains. This high-throughput approach allows a comparison to be made between the WKY and SHR transcripts; profiling their respective abundances and enabling a highlighting of any significant differences between the two. Furthermore, sequencing the transcriptomes of these animals at an age prior to hypertension (within the SHR) will identify transcripts that show the potential to prognostically differentiate between animals that will later develop hypertension and those that will not. 
+
+One of the key challenges with primary research involving animal models is how translatable these models are to human biology. This is indeed the main test in taking biological insights gained from the laboratory to the clinic. It is therefore pertinent to conduct a literature review of potential genetic traits that have already been identified within a human population. Only a handful of studies have covered the genetic traits associated with blood pressure, although these lacked replication or were based on limited sample sizes \cite{Leonardson2010,Zeller2010,Bull2004,Korkor2011}. However, one group in particular curated six independent studies and conducted an association assessment to produce a meta-analysis of gene expression signatures of blood pressure and hypertension \cite{Huan2015}. The study made use of patients who were not receiving any anti-hypertensive treatments in order to avoid the possibility of transcriptomic profiles representing pharmaceutical intervention. This allowed the analysis of patterns in the data that were reflective of inherent genetic predispositions. From the 7,017 participants, differentially expressed BP genes were identified from the largest cohort which were cross referenced with the other cohorts to produce a final list of genes implicated in regulating blood pressure. The study continued to perform a meta-analysis of all participants for BP associated genes. This was followed by a \acrshort{gwas} and integrating \acrfull{eqtl} data in order to differentiate transcriptomic changes from BP from putative causal pathways involved in BP regulation. These final lists enabled a directed approach to be taken with a previously obtained RNAseq output dataset and give rise to the possibility of any downstream biomarkers being translated to a human cohort. 
+
+In this chapter the initial approach towards assessing differentially expressed transcripts between a normotensive and hypertensive rat model is outlined, making use of a high-throughput RNAseq analysis approach. 
+
+\section{Aims}
+Using a previously sequenced n=3 generated dataset, the following will be performed;\\
+\begin{itemize}
+\singlespacing
+  \item A full QC assessment of previously generated RNAseq raw reads \\
+	\item Pipeline designed for RNAseq to produce list of differentially expressed genes \\
+	\item Gene ontology of resulting data \\
+	\item Candidate selection based on the output data \\
+	\item Validation using the newly extracted RNA \\
+	\item Assessment of the false discovery rate \\
+\end{itemize}
+
+\doublespacing
+\section{Materials and Methods}
+
+\subsection{Animals}
+
+All animal work complied with the \acrfull{aspa}. \acrfull{shr} and their age matched \acrfull{wky} controls were supplied at either the prehypertensive 3 weeks of age, or the fully hypertensive 12 weeks of age (n=3/group; Harlan UK Ltd. - Loughborough, UK).  Animals were houses in Plexiglas cages in groups of 3 per cage. Each rat had access to food and water \textit{ad libitum} and were supplied with cardboard tubing for cage enrichment. They were maintained in these conditions and checked daily for signs of poor health for 7 days to allow them to habituate to their new environment and being handled. This prevented any potentially confounding effects on our data by way of elevated stress or ill-health. 
+
+\subsection{Sample Preparation}
+Rats were sacrificed via guillotine, and whole blood was collected from the decapitated rat via a funnel into a potassium \acrfull{edta} tube (BD Biosciences - Franklin Lakes, N.J., U.S.A) to prevent coagulation. The body was gently massaged to prevent internal coagulation. Each blood sample had $\sim$ 600$\mu$l of RNAlater Solution (Ambion Inc. - Austin, Texas, USA) added and was then stored at -20\degree C. 
+
+\subsection{Blood RNA Extraction}
+All RNA extraction took place on wet ice and in an RNAse free environment, ensured by good laboratory practice in addition to liberal cleaning of equipment and work spaces with RNAaseZap (Ambion Inc. - Austin, Texas, USA). 
+
+Blood samples were initially thawed on wet ice after having been stored at -80\degree C. The RiboPure Blood Kit (Ambion Inc. - Austin, Texas, USA) was used to extract total blood RNA. All centrifugation steps were conducted at $\sim$ 16,000 x g at room temperature as per the RiboPure Blood Kit protocol. As samples were stored in RNAlater Solution they were first centrifuged for 1 minute. The supernatants was removed and 800$\mu$l Lysis Solution and 50$\mu$l Sodium Acetate Solution was added to the pellets. After vigorously vortexing to lyse the blood cells, 500$\mu$l of Acid-Phenol: Chloroform was added to each sample for the phase separation step. Samples were left for 5 minutes at room temperature before centrifuging for 1 minute to separate the aqueous and organic phases. The upper (aqueous) phase containing the RNA was aspirated to a new tube. 600$\mu$l 95-100\% \acrfull{etoh} was added to each, and samples were vortexed briefly to ensure mixing. Samples were then passed through a filter cartridge housed in a 2ml tube ~700$\mu$l at a time. ~700$\mu$l of Wash Solution 1 was added and washed through the column by centrifuging for 5-10 seconds. Again, flow-through was discarded before 2 x 700$\mu$l washes with Wash Solution 2/3 were conducted as centrifugations of 5-10 seconds each. Flow-through was discarded and samples were centrifuged again for 1 minute to remove residual fluid from within the filter. Finally, to elute the RNA the spin cartridges were transferred to a new RNAse free tube and 50$\mu$l of Elution Solution (at ~75\degree C) was added to the centre of the filter. Samples were left for 20 seconds before centrifuging for 20-30 seconds to elute RNA. This step was repeated resulting in 100$\mu$l of RNA containing water. 
+
+
+\subsection{RNA Quality Control \& cDNA Synthesis} \label{RNAQuality&cDNA Synthesis}
+Ensuring samples were constantly placed in wet ice, extracted RNA was assessed for purity and quantity via spectrophotometry (NanoDrop 2000c, ThermoScientific). Once output values were collated samples that presented poor 260:230 and 260:280 ratios were omitted. The finally selected samples were then used for cDNA conversion. The cDNA synthesis kit requires an RNA input volume of 12$\mu$l. Since a dilution of samples to a normalised concentration requires fewer potentially damaging steps than a concentrating of samples, samples were normalised to that of the smallest sample concentration multiplied by 12. Samples could then be diluted to this value by adding RNAse free Millipore $H_{2}0$ up to a total volume of 12$\mu$l. This resulted in all samples having the same final concentration prior to cDNA synthesis. 
+cDNA conversion was conducted using the Quantitect RT kit (Qiagen - Hilden, Germany). Normalised samples were incubated with 2$\mu$l of genomic DNA wipe-out reagent at 42\degree C for 2 minutes before returning to wet ice in order to digest unwanted genomic DNA. An Reverse Transcription (RT) mastermix sufficient for all samples (+10\%) was then prepared (Table ~\ref{cDNA Synthesis Master Mix}). 6$\mu$l of this mastermix was added to each of the normalised samples before incubation at 42\degree C for 45 minutes. After, the incubation samples were immediately placed in a water bath set at 95\degree C for 3mins in order to stop the conversion and denature all of the previously active enzymes. Samples were then rapidly returned to wet ice ready for qPCR analysis. \\
+
+
+\begin{table}[!hbtp]
+\centering
+\begin{tabular}{l | r }
+Reagent & Volume Per 12$\mu$l Sample of RNA \\
+\hline
+Reverse Transcriptase & \textit{1$\mu$l} \\
+RT Buffer (5x) & \textit{4$\mu$l} \\
+RT Primer Mix & \textit{1$\mu$l} \\
+Total Volume & \textit{6$\mu$l} \\
+\end{tabular}
+\caption[Table of reagents required for cDNA synthesis Master Mix]{Table of reagents required for cDNA synthesis Master Mix}
+\label{cDNA Synthesis Master Mix}	
+\end{table}
+
+\subsection{RNA Sequencing} \label{method_n=3}
+Amplified cDNA libraries were prepared from isolated RNA samples previously obtained within the laboratory and sequenced using the Illumina HiSeq 2500 Sequencer (Illumina, Inc. - San Diego, CA, USA). Total RNA samples were enriched by hybridisation to bead-bound rRNA probes using Ribo Zero Kit to obtain rRNA- depleted samples. This was followed by the construction of Illumina libraries using ScriptSeq v2 (Illumina, Inc. - San Diego, CA, USA) that applies unique barcode adapters. The libraries were assessed for their quality using a Qubit dsDNA High Sensitivity DNA Kit and Agilent 2100 Bioanalyzer (Agilent Technologies, CA, USA; Agilent High Sensitivity DNA Kit). This followed with further enrichment and amplification of the libraries by qPCR using KAPA Biosystems Library Quantification Kit, before all samples were normalised to 2 nM. Equal volumes of individual libraries were pooled and run on a MiSeq using MiSeq Reagent Kit v2 (Illumina, Inc. - San Diego, CA, USA) to validate the library clustering efficiency. The libraries were then re-pooled based on the MiSeq demultiplexing results and sequenced on a HiSeq 2500 sequencing platform (Illumina, Inc. - San Diego, CA, USA) and cBot with Ver 3 flow cells and sequencing reagents. Library reads of greater than 30 to 35 million were generated for each individual library. The data were then processed using Real-Time Analysis (RTA) and CASAVA thus providing four sets of compressed FASTQ files per library. FASTQ files were concatenated across lanes to yield two files per sample (Reads 1 and 2 of a paired end sequencing run). 
+
+\subsection{Quality Control and Adapter Trimming}
+All raw reads were pre-processed for quality assessment using the FastQC package \cite{Andrews2010}. This measures a series of metrics and provided their output in graphical form, allowing a bioinformatician to assess the need for adapter removal, quality trimming and size selection before pushing forward with the pipeline. A Phred30 quality cutoff was adopted (99.9\% base call accuracy).
+
+\subsection{Alignment}
+RNAseq alignment and data analysis were all performed in-house using a high-performance computer; “Hydra”. This pipeline made use of bash and python scripting to accept RNAseq post-trimmed data as input, before ultimately producing output tables of differentially expressed transcripts. Paired-end (2x100bp) raw input data was initially aligned with Tophat to the sixth iteration of the Rattus norvegicus reference genome (Rn6) \cite{Trapnell2009}. HTseq was used to generate read counts using the ENSEMBL Rnor\_6.0.97 annotation for reference \cite{Anders2015}. 
+
+\subsection{Normalisation of Reads}
+Here, raw read counts were supplied as input to the pipeline and each statistical DGE calling software suite applied is own normalisation strategy to deal with library size, transcript length, or detection of counts to transcripts (Table ~\ref{tab:RNAseqnorm}). \\
+
+\begin{table}[!hbtp]
+\scriptsize
+\centering
+\begin{tabular}{lrr}
+\textbf{Method}                          & \textbf{Description}                                                    &        \textbf{Reference} \\
+\hline    
+EdgeR                           & Negative binomial count distribution;                                           & Robinson, McCarthy  \\
+                                & genewise dispersion parameter estimation                                        & \& Smyth (2010) \cite{Robinson2010}                \\
+                                & via conditional maximum likelihood;                                             & \\
+                                & empirical Bayes shrinkage of dispersion parameter;                              &             \\
+                                & exact test for p-value computation                                              &       \\
+DESeq                           & Negative binomial count distribution;                                           & Anders \& Huber  \\
+                                & local regression modeling of mean and variance parameters                       & (2010) \cite{Anders2010}\\
+DESeq2                          & Negative binomial count distribution; generalized linear model;                 & Love, Huber \\
+                                & shrinkage estimation of dispersion parameter and fold change                    & \& Anders (2014) \cite{Love2014}\\
+\end{tabular}
+\caption{Description of the core modeling strategies of DGE analysis methods for RNAseq. Adapted from Khang, T. F., \& Lau, C. Y. (2015) \cite{Khang2015a}}
+\label{tab:RNAseqnorm}	
+\end{table}
+
+\subsection{Differential Gene Expression Predictions}
+Due to the huge number of available packages for calling differential expression, this pipeline initially made use of several statistical methods from the R Bioconductor suite: DESeq, DESeq2, and EdgeR. Each of these methods allows for the prediction DGE with high confidence, and to utilise the predictions with low p-values in downstream validation. As such, the resulting dataset produced contained all of these prediction approaches to enable an assessment of the differences between them.
+
+\subsection{Candidate Selection}
+\subsubsection{Primary Candidate List}
+Over 12,000 transcript elements were flagged up from this comparison, including; pseudogenes, miRNAs and rRNAs, in addition to protein coding transcripts. Using datasets for both blood samples, reads were initially ranked based on EdgeR. The selection of EdgeR to rank by fold change was an arbitrary one, and based on it being established in the literature and of a lower stringency to the other statistical tests. This resulted in a greater list to use for downstream filtering. Unidentified transcripts without a putative role/classification were then discarded, as well as reads identified as non-protein coding so focus could be given to characterised mRNA transcripts. Once these parameters were established, reads that were observed to be most significantly modulated between the WKY and SHR strains gave a preliminary candidate list for validation (Table ~\ref{fig:all1RNAseq}).
+
+\subsubsection{Final Candidate List}
+From the Primary Candidate List, 12 transcripts were selected. Half of these were genes that were selected based on EdgeR P-values $<$0.05 (with the exception of Cat, which had an EdgeR P-value of 0.08 and was included in order to test the accuracy of the DGE software). The remaining 6 transcripts that made up the final candidate list, were transcripts that were implicated in Huan \textit{et al.}'s 2015 Metaanalysis of hypertensive signature genes and similarly detected within the RN6 WKY vs SHR dataset, regardless of whether or not they were significant or not between the two strains. This resulted in a final list of 12 transcripts that could be used to both validate the RNAseq predicted fold changes observed, and identify potential biomarkers that could discern between the hypertensive strain and its control (Table ~\ref{tab:candidatelistRNAseq}). 
+
+
+\subsection{Oligonucleotide Primers}
+Once targets were selected, nucleotide sequences of genes of interest were obtained from the NCBI GenBank database. The output FASTA format sequences could be transferred to the NCBI Primer design tool online \cite{Ye2012}. Of the options available only; PCR Product Size, Primer Melting Temperatures ($T_{m}$), and Organism were altered (Table ~\ref{Amended qPCR Primer Design Parameters}). This was in order to yield primers that were more specific to their intended targets, by allowing for a smaller PCR product size and a more narrow range of temperature for primer melting. All other parameters were kept at default settings. \\
+
+\begin{table}[!hbtp]
+\small
+\centering
+\begin{tabular}{p{3cm}|p{5cm}|p{5cm}}
+Parameter & Default Setting & Amended Setting \\
+\hline
+PCR Product Size & \textit{Min; 70, Max; 1000} & \textit{Min; 70, Max; 150} \\
+Primer Melting Temperatures ($T_{m}$) & Min; 57.0, Opt; 60.0, Max; 63.0, Max Tm Difference; 3 & Min; 58.0, Opt; 59.0, Max; 60.0, Max Tm Difference; 2 \\
+Organism & \textit{Homo sapiens} & \textit{Rattus novegicus (taxid: 10116)}
+\end{tabular}
+\caption[Amended qPCR Primer Design Parameters]{Amended qPCR Primer Design Parameters. Here, the core settings amended include; the expected product size, the primer melting temperature (\textit{$T_{m}$}), and the organism for which the primers are being designed against.}
+\label{Amended qPCR Primer Design Parameters}	
+\end{table}
+
+
+\subsection{Primer Validation}
+For conducting any of the RT-qPCR plates, 2$\mu$l of cDNA converted from the blood RNA extraction was pipetted out (in duplicate) into a 0.1mL 96-well Reaction Plate (Applied Biosystems, Life Technologies™ - USA) placed on wet ice. A master mix was prepared containing the; forward and reverse primers for the region of interest and the SYBR Green Master mix buffer (Roche - Basel, Switzerland) containing; SYBR Green dye, DNA Polymerase, dNTPs and a salt buffer (Table ~\ref{qPCRPrimers}). This was made up to a total reaction volume of 13$\mu$l per well with RNAse free $H_{2}0$ (Table ~\ref{tab:qPCRMaster}). Also included were a No Template Control (NTC), which included all of the aspects of the reaction mixture outlined above except for the 2$\mu$l sample template, and a Millipore $H_{2}0$ only; both in duplicate. These enabled an assessment as to whether any contamination in the reaction mixture or water would yield any confounding fluorescence that would influence the final $C_{T}$ reads.
+
+\begin{table}[!hbtp]
+\scriptsize
+\centering
+\begin{tabular}{p{1.5cm}|p{5cm}|p{5cm}}
+\small{Gene Probe} & \multicolumn{2}{c}{\small{Primer Sequence}} \\
+{} & \small{Forward} & \small{Reverse} \\
+\hline
+\small{\textit{capza1}} & {\textit{5’-GCTCGTGTGGATGAGTACCT-3’}} & {\textit{5’-GATTTTGCAGCCAGCACTGA-3’}} \\
+\small{\textit{ifit1}} & {\textit{5’-GTCACCTTCCTCTGGCTACC-3’}} & {\textit{5’-ATGGCCTGATGTGCCAATTC-3’}} \\
+\small{\textit{ankrd35}} & {\textit{5’-AGGTTGGATGGAGCGAAGAT-3’}} & {\textit{5’-TCTTTGGTGCTCCGTCTCTT-3’}} \\
+\small{\textit{gstt3}} & {\textit{5’-GCTCGTGTGGATGAGTACCT-3’}} & {\textit{5’-GATTTTGCAGCCAGCACTGA-3’}} \\
+\small{\textit{cat}} & {\textit{5’-TATCTCCTATTGGGTTCCCGC-3’}} & {\textit{5’-GCTGTGCTGACTCCTCTACT-3’}} \\
+\small{\textit{zcchc9}} & {\textit{5’-TGCGGAGAAATGGGACATCT-3’}} & {\textit{5’-AAAATGTTCCACGGAGCCAC-3’}} \\
+\small{\textit{myadm}} & {\textit{5’-TTCTTGGCAGAGATTCCCGA-3’}} & {\textit{5’-ATTTGCTTACACCCCACCCA-3’}} \\
+\small{\textit{dusp1}} & {\textit{5’-CTCGGCCAATTGTCCTAACC-3’}} & {\textit{5’-GAACGCAGAGATCCCAGACA-3’}} \\
+\small{\textit{glrx5}} & {\textit{5’-CGGAGCTGAGGCAAGGTATTA-3’}} & {\textit{5’-TCCCACAGATGTGTACTTGCT-3’}} \\
+\small{\textit{gramd1a}} & {\textit{5’-GGCTTCGTGTATCCTCAGAGA-3’}} & {\textit{5’-AGTAGCCCACGAGCATCTTT-3’}} \\
+\small{\textit{ppp1r15a}} & {\textit{5’-TGTCAGAATGCAGAGGCTGA-3’}} & {\textit{5’-AGTGCACCTTTCTACCCTTCA-3’}} \\
+\small{\textit{slc31a2}} & {\textit{5’-AAGCCAAGTTGCTCCACAAG-3’}} & {\textit{5’-TAGGGTTTGTACCTGAGGCG-3’}} \\
+\small{\textit{eef2k}} & {\textit{5’-CATTGGCCAGTGTTTGGTGA-3’}} & {\textit{5’-TCATCCAGGTCACTTCGCTT-3’}} \\
+\small{\textit{tuba1c}} & {\textit{5’-TGCCTTTGTGCACTGGTATG-3’}} & {\textit{5’-TTCAGCACTATCTGCCCCAA-3’}} \\
+\small{\textit{eno1}} & {\textit{5’-AGGGTGTCTCAAAGGCTGTT-3’}} & {\textit{5’-ATTCTCTGTGCCGTCCATCT-3’}} \\
+\small{\textit{$\beta$-actin}} & {\textit{5’-CAGCCGCGAGTACAACCTTC-3’}} & {\textit{5’-CCCATACCCACCATCACACC-3’}} \\
+\small{\textit{gapdh}} & {\textit{5’-ATGATTCTACCCACGGCAAG-3’}} & {\textit{5’-CTGGAAGATGGTGATGGGTT-3’}} \\
+\small{\textit{rpl19}} & {\textit{5’-GCGTCTGCAGCCATGAGTA-3’}} & {\textit{5’-TGGCATTGGCGATTTCGTTG-3’}} \\
+\end{tabular}
+\caption[qPCR Primer Sequences for Primer Validation]{qPCR Primer Sequences used for Primer Validation. Primers were designed using the NCBI Primer design tool online with settings amended to those seen in Table ~\ref{Amended qPCR Primer Design Parameters} \cite{Ye2012}.}
+\label{qPCRPrimers}	
+\end{table}
+
+
+
+\begin{table}[!htbp]
+\small
+\centering
+\begin{tabular}{l | r}
+Reagent & Volume Per Reaction \\
+\hline
+SYBR Green Master mix buffer  & \textit{6$\mu$l} \\
+Forward Primer (100ng/$\mu$l) & \textit{0.048$\mu$l} \\
+Reverse Primer (100ng/$\mu$l) & \textit{0.048$\mu$l} \\
+RNAse Free $H_{2}0$ &  \textit{4.904$\mu$l} \\
+Sample cDNA &  \textit{2$\mu$l} \\
+\end{tabular}
+\caption[Table of reagents for qPCR Master Mix]{Table of reagents required for qPCR Master Mix}
+\label{tab:qPCRMaster}	
+\end{table}
+
+Plates were centrifuged in a desktop centrifuge (PerfectSpin Plate Centrifuge; VWR PeqLab, UK to collect the reaction mix at the base of each well and remove any bubbles that could otherwise optically interfere with the instrument. The plates were then loaded into the StepOne RealTime PCR System (Applied Biosystems, Life Technologies™ - USA). Settings were kept consistent for all qPCR experiments performed, with total reaction volume amended to 13$\mu$l, and a run of 40 cycles. The threshold for calculating $C_{T}$ values was set automatically but checked visually to confirm it was bisecting the exponential phase of the detection curve. A melt curve was performed on each plate after the extension phase of the final  qPCR cycle. StepOne RealTime PCR System software automatically rendered a graph displaying changes in fluorescence reporter ($\Delta$-R) against increasing temperature ($\Delta$\degree C). This enabled the confirmation that no signals were produced due to artefacts such as primer dimerization (Figure ~\ref{fig:meltcurve}). Once both the $C_{T}$ and Melt curve graphs were checked, raw $C_{T}$ values were exported for further use in Microsoft Excel. \\
+
+\begin{figure*}[!hbtp]
+\centering
+\includegraphics[scale=0.9]{chapter1/meltcurve.png}
+\caption[Representative plot of a post-PCR melt curve]{Representative plot of a post-PCR melt curve as generated by StepOne RealTime PCR Software (Applied Biosystems, Life Technologies™ - USA). Plot shows the levels of fluorescence against changing temperature to ensure primers show a uniform melting point that would not yield false positive detections.}
+\label{fig:meltcurve}
+\end{figure*}
+
+Once raw $C_{T}$ values were in Excel technical replicates were first assessed for variation. The Grubb’s, or Extreme Studentized Deviate (E.S.D.) test, on GraphPad’s Outlier Calculator was used to assess whether or not a replicate was an outlier within a treatment group \cite{doi:10.1080/00401706.1969.10490657}. The test calculates a specific Z-score for each sample and predicts an outlier if the sample's Z-score is over a threshold specific to the N of the samples supplied. Technical replicates that satisfied this criteria were averaged to produce an average $C_{T}$ value per biological replicate.
+
+In order to confirm the qPCR primers adhere a linear and predictable increase in fluorescence, proportional to increases in target cDNA, every primer was first subjected to a calibration run. This was conducted using a pool of all sample’s cDNA in order to cover the dynamic range of gene expression for all of the following experiments. A series dilution was made using this pooled cDNA and RNAse free Millipore $H_{2}0$ to the following dilutions; Neat, 1:2, 1:5, 1:10, 1:20, and 1:50. 2$\mu$l of each dilution was used in duplicate to produce a series of average $C_{T}$ values per dilution.
+
+The following formula was then used to assess primer efficiency and plot this on a standard curve (Figure \ref{eq:linearreg}, Figure ~\ref{fig:primereff}) at a range of dilutions used;
+
+\begin{figure}[!hbtp]
+\LARGE
+\[y=kx+d\]
+\normalsize
+\begin{align*}
+\text{Where;} ~y &= \text{Average $C_{T}$ for a given dilution} \\
+k &= \text{Line of best fit, using "Least Squares" method} \\
+d &= y \text{ intercept at $Log_{e}$(1)}
+\end{align*}
+\caption[Equation of linear regression for Primer validation]{Equation to represent the linear regression of $\log_{n}[cDNA]$ \textit{versus} Primer $C_{T}$ Value.}
+\label{eq:linearreg}
+\end{figure}
+%\equationset{Equation for calculating Phred Score}
+
+\noindent From this, a PCR efficiency metric was calculated using the equation depicted in Figure \ref{eq:primereff}. PCR primers were deemed to be acceptably efficient if this value was between 80-120\%. As there were several candidate genes selected for further validation, any genes whose primers failed to show efficiencies within this range were dropped from future analysis. This enabled focus to be given to only the genes with the ability to detect with a higher level of confidence. 
+
+\begin{figure}[!hbtp]
+\LARGE
+\[ E=(10^{(-\frac{1}{Slope})}-1)\times 100\]
+\normalsize
+\begin{align*}
+\text{Where;} ~E &= \text{Primer Efficiency (\%)} \\
+~Slope &= \text{Slope coefficient, as denoted by \textit{k} in equation \ref{eq:linearreg}}
+\end{align*}
+\caption[Equation to calculate Primer Efficiency]{Equation to calculate Primer efficiency from linear regression calculated from equation \ref{eq:linearreg} (\%).}
+\label{eq:primereff}
+\end{figure}
+%\equationset{\textnormal{Equation to calculate Primer efficiency (\%).}}
+
+\begin{figure*}[!hbtp]
+\centering
+\includegraphics[scale=0.6]{chapter1/Glrx5PrimerEfficiency.pdf}
+\caption[Example Standard Curve]{Example Standard Curve for assessing primer efficiency (Glrx5). Detection values are plotted against the natural log transformed range of cDNA template dilutions. From the resulting regression analysis, the calculation of the slope was input into the formula outlined below.}
+\label{fig:primereff}
+\end{figure*}
+
+\subsection{qPCR of Target Genes} \label{qPCR of Target Genes}
+PCR plates were conducted via the above methodology once primers were deemed to be suitably efficient. An initial plate was ran with $\beta$-Actin as the reference gene for blood on all WKY and SHR samples, both juveniles and adults. Afterward, each primer was ran using the same template layout (Figure ~\ref{fig:96-WellPlate_wkyvshr}) for ease of comparison later on.  \\
+
+\begin{figure*}[!hbtp]
+\centering
+\includegraphics[scale=0.5]{chapter1/96-WellPlate_wkyvshr.png}
+\caption[qPCR plate layout for WKY vs SHR Comparison]{qPCR Layout for WKY vs SHR comparisons at both Juvenile and Adult ages}
+\label{fig:96-WellPlate_wkyvshr}
+\end{figure*}
+
+Here, the $2^{-\Delta\Delta C_{T}}$ method of normalisation was used as per Livak \textit{et al}, 2001 \cite{Livak2001}. Firstly, absolute $C_{T}$ values for the appropriate tissue reference gene were selected from the $C_{T}$ values for the gene of interest to produce a $\Delta C_{T}$ value. Following this calculation, the mean $\Delta C_{T}$ was subtracted from each of the individual sample values giving a $\Delta\Delta C_{T}$ value per sample. Finally the negative exponent was taken of these values to produce a relative gene expression fold change ($2^{-\Delta\Delta C_{T}}$). This resulted in a series of values normalised against the selected housekeeping gene, that could be compared relatively against other values on the same plate. 
+
+Statistics were calculated by assuming a Gaussian distribution to conduct unpaired two-tailed Student’s T-test analyses via the GraphPad Prism statistical software package. A confidence interval of 95\% (0.05) was adopted for the threshold of significance.  Bar plots were produced using GraphPad and edited for clarity. 
+
+\section{Results}
+\subsection{RNAseq Dataset}
+\subsubsection{QC Of RNAseq Data}
+
+FastQC output of reads, both pre- and post adapter trimming, showed consistently high mean Phred quality scores across the entire read length (Mean Phred$<$30, Figure ~\ref{fig:n3QCa}). Furthermore, per base N content also showed a pass as the mean count for all positions across the reads was below the $<$5\% cutoff threshold. The metric for per sequence quality scores also shows a pass for both pre- and post trimmed reads as the most frequently observed mean quality is the Phred cutoff of $>$27. The analysis of GC content was conducted to assess potential levels of contamination by assessing the distribution of GC bases across the reads. Here it flagged a failure across all samples as it did not follow the pattern of a normal distribution as expected. The software issues a failure flag if the sum of the deviations from the normal distribution represents more than 30\% of the reads. When assessing for over-represented sequences, all of the reads fail the FastQC analysis as each of the read files were found to contain sequences that represent more than 1\% of the total reads. \\
+
+\begin{figure*}[!hbtp]
+\centering
+\begin{tabular}{cc}
+\small{Untrimmed} & \small{Trimmed} \\
+  \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Untrimmed/fastqc_per_base_sequence_quality_plot.png} & \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Trimmed/fastqc_per_base_sequence_quality_plot.png} \\
+  \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Untrimmed/fastqc_per_base_n_content_plot.png} & \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Trimmed/fastqc_per_base_n_content_plot.png} \\
+  \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Untrimmed/fastqc_per_sequence_quality_scores_plot.png} & \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Trimmed/fastqc_per_sequence_quality_scores_plot.png} \\
+\end{tabular}
+\caption[RNAseq Quality Control metrics]{RNAseq Quality Control Metrics, as generated by the FastQC package \cite{Andrews2010}. Here, Quality control metrics are displayed both before and after adapter trimming.}
+\label{fig:n3QCa}
+\end{figure*}
+
+\begin{figure*}[!hbtp]
+\ContinuedFloat 
+\centering
+\begin{tabular}{cc}
+\small{Untrimmed} & \small{Trimmed} \\
+  \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Untrimmed/fastqc_per_sequence_gc_content_plot.png} & \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Trimmed/fastqc_per_sequence_gc_content_plot.png} \\
+  \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Untrimmed/fastqc_overrepresented_sequencesi_plot.png} & \includegraphics[width=0.5\textwidth]{chapter1/n3Data/Trimmed/fastqc_overrepresented_sequencesi_plot.png} \\
+\end{tabular}
+\caption[RNAseq Quality Control metrics, continued.]{RNAseq Quality Control Metrics, as generated by the FastQC package \cite{Andrews2010}. Here, Quality control metrics are displayed both before and after adapter trimming.}
+\label{fig:n3QCb}
+\end{figure*}
+
+
+
+\subsubsection{Alignment to a Reference Genome}
+
+Tophat produced alignment rates were relatively low for each sample with high levels of discordant or unaligned reads reported (Figure ~\ref{fig:alignmentrate}). On average, 67\% of reads were aligned to the reference genome, of which an average of 0.5\% were multiple alignments. Furthermore, of the aligned and singly-mapped reads, an average of only 31\% were concordantly mapped. Interestingly, the SHR samples had a higher rate of; Total Read Alignment, Multiple Alignments, and Concordantly aligned reads, as compared with the WKY samples (Table ~\ref{fig:n_3_alignmentrates}). \\  
+
+\begin{figure*}[!hbtp]
+\centering
+\includegraphics[width=0.8\textwidth]{chapter1/n3Data/Alignment/tophat_alignment.png}
+\caption[Tophat Alignment rates for N=3 Dataset]{Plot of Tophat generated alignment rates (Millions of reads) for the n=3 dataset. Here, the total reads are split into; Aligned, Multimapped, Discordantly Mapped, and Not Aligned.}
+\label{fig:alignmentrate}
+\end{figure*}
+
+\subsubsection{Generation of Gene Counts}
+
+Aligned reads were annotated using the Rn6 Rattus norvegicus genome to produce a count of transcripts for each animal. Running a Principal Component Analysis (PCA) on the samples before and after EdgeR normalisation reveals inherent biases within the data (Figure ~\ref{fig:PCA_RawvsEdgeR}). Raw reads reveal a distinct pattern on both PC axis, with two out of three SHR samples forming an isolated cluster on the right hand side of the graph. This separation represents the greatest source of variation (PC1=57.15\%). The second PC for the raw reads effectively stratifies between the experimental groups. Post-normalisation, PC1 now appears to resolve the two experimental groups across the X-axis (PC1=77.89\%). The PC2 variation no longer isolates samples effectively, and is now likely representative of biological variation between samples. Here, the necessity for normalisation to prevent RNAseq induced biases from altering our downstream biological interpretation becomes apparent. 
+
+\begin{figure*}[!hbtp]
+\centering
+\includegraphics[width=0.65\textwidth]{chapter1/n3Data/counts/WKYVSSHR-PCA.pdf}
+\includegraphics[width=0.65\textwidth]{chapter1/n3Data/counts/NormalisationEdgeR/WKYVSSHR-PCA.pdf}
+\caption[Principal Component Analysis - Raw vs EdgeR Normalised]{Principal Component Analysis (PCA) of n=3 counts. PCA was conducted on both raw (Top) and EdgeR normalised (Bottom) counts. Both PCA outputs reveal a clear separation between the strains.} 
+\label{fig:PCA_RawvsEdgeR}
+\end{figure*}
+
+\subsubsection{Differential Expression} \label{chapter1diffexp}
+
+Final predictions for differential expression were curated and the first two pages of "hits", ranked by EdgeR P-Value smallest to highest, are listed in Table ~\ref{fig:all1RNAseq}. To summarise, 12,564 transcript elements were detected by the RNAseq run, with transcript counts up to 629,055 (Hba-a3, WKY DESeq Generated average count). Adopting a P-Value threshold of $<$0.05, DESeq predicted 354 transcripts to be significantly regulated between the strains. EdgeR provided a less stringent prediction of 1,821 significantly regulated transcripts and DESeq2 reported 691 transcripts.
+
+Gene ontology analysis of all EdgeR transcripts that had P-Values $<$0.05 showed the majority of significantly regulated genes to belong to the Hydrolase, Transferase and Oxidoreductase activity GO terms (Figure ~\ref{fig:GO}). 
+
+\begin{figure*}[!hbtp]
+\centering
+\includegraphics[width=1\textwidth]{chapter1/n3Data/DifferentialExpression/BP_Go.png}
+\caption[Molecular Function Gene Ontology analysis of EdgeR Significant Transcripts in the Blood]{Molecular Function Gene Ontology analysis of EdgeR Significant (P-Value$<$0.05) Transcripts in the Blood.}
+\label{fig:GO}
+\end{figure*}
+
+The finally selected genes are outlined in Table ~\ref{tab:candidatelistRNAseq}. 
+
+\begin{sidewaystable}[]
+\scriptsize
+\centering
+\begin{tabular}{lllrrrrrrrr}
+&                   &                   & \multicolumn{4}{c}{\textbf{DESeq}}                                             & \multicolumn{2}{c}{\textbf{EdgeR}} & \multicolumn{2}{c}{\textbf{DESeq2}} \\
+&                   & \textbf{Gene Name} & \textbf{WKY.Avg} & \textbf{SHR.Avg} & \textbf{FC} & \textbf{P-Value} & \textbf{FC}   & \textbf{P-Value}   & \textbf{FC}    & \textbf{P-Value}   \\
+\hline
+\parbox[t]{2mm}{\multirow{6}{*}{\rotatebox[origin=c]{90}{Selected}}} & ENSRNOG00000013538 & Capza1            & 85.87                 & 81.55                 & 0.95        & 1.00             & 1.00          & 1.00               & 0.95           & 0.92               \\
+& ENSRNOG00000019050 & Ifit1             & 296.53                & 2324.18               & 7.84        & 1.30E-45         & 8.26          & 1.33E-25           & 7.47           & 1.70E-47           \\
+& ENSRNOG00000025108 & Ankrd35           & 0.60                  & 91.29                 & 151.25      & 2.16E-14         & 121.41        & 4.42E-23           & 20.44          & 3.09E-14           \\
+& ENSRNOG00000001242 & Gstt3             & 0.00                  & 132.70                & NA          & 1.60E-22         & 1464.58       & 2.78E-28           & 31.94          & 2.74E-18           \\
+& ENSRNOG00000008364 & Cat               & 11696.90              & 7572.97               & 0.65        & 0.09             & 0.68          & 0.01               & 0.65           & 1.16E-04           \\
+& ENSRNOG00000051682 & Zcchc9            & 2.11                  & 37.30                 & 17.71       & 5.25E-04         & 17.93         & 5.67E-11           & 7.06           & NA                 \\
+\hline
+\parbox[t]{2mm}{\multirow{6}{*}{\rotatebox[origin=c]{90}{Huan \textit{et al.}}}} & ENSRNOG00000053450 & Myadm             & 43.34                 & 31.92                 & 0.74        & 1.00             & 0.77          & 0.27               & 0.75           & 0.51               \\
+& ENSRNOG00000003977 & Dusp1             & 41.59                 & 35.33                 & 0.85        & 1.00             & 0.88          & 0.69               & 0.86           & 0.79               \\
+& ENSRNOG00000004206 & Glrx5             & 4888.10               & 2072.04               & 0.42        & 8.59E-08         & 0.45          & 7.55E-07           & 0.43           & 7.80E-12           \\
+& ENSRNOG00000021106 & Gramd1a           & 48.59                 & 75.08                 & 1.55        & 1.00             & 1.60          & 0.03               & 1.48           & 0.23               \\
+& ENSRNOG00000020938 & Ppp1r15a          & 594.23                & 834.08                & 1.40        & 0.47             & 1.47          & 0.01               & 1.39           & 0.01               \\
+& ENSRNOG00000013631 & Slc31a2           & 5.54                  & 2.16                  & 0.39        & 1.00             & 0.42          & 0.39               & 0.65           & NA                
+\end{tabular}
+\caption[Original RNAseq Output of Finally selected Candidate Transcripts]{Original RNAseq Output of Finally selected Candidate Transcripts. DESeq generated average counts are displayed for each group, along side fold changes and P-Value predictions from each differential expression analysis software. \textit{N.B.} For DESeq2, the $log_{2}$ Fold Change values have been converted to the comparable fold change values. Furthermore, the "NA" P-Values issued by DESeq2 are returned due to a single sample with an extreme outlier (as detected by Cook's distance).}
+\label{tab:candidatelistRNAseq}
+\end{sidewaystable}
+
+
+
+
+
+
+
+
+
+\begin{sidewaystable}[]
+\scriptsize
+\centering
+\begin{tabular}{lp{3cm}p{1.5cm}p{4cm}p{12cm}}
+&                   & \textbf{Gene} & \textbf{Full Gene Name}   & \textbf{Gene Description (Rat Genome Database)} \\
+\hline
+\parbox[t]{2mm}{\multirow{6}{*}{\rotatebox[origin=c]{90}{Selected}}} & ENSRNOG00000013538 & Capza1     & capping actin protein of muscle Z-line subunit alpha 1      &  	Predicted to have actin filament binding activity. Predicted to be involved in actin cytoskeleton organization; barbed-end actin filament capping; and cell junction assembly.                            \\
+
+& ENSRNOG00000019050 & Ifit1             & Interferon-induced protein with tetratricopeptide repeats & Predicted to be involved in cellular response to cytokine stimulus; defense response to virus; and response to bacterium. Orthologous to several human genes including IFIT1B (interferon induced protein with tetratricopeptide repeats 1B).    \\
+
+& ENSRNOG00000025108 & Ankrd35           & Ankyrin Repeat Domain 35                            & Orthologous to human ANKRD35 (ankyrin repeat domain 35) \\
+
+& ENSRNOG00000001242 & Gstt3             & Glutathione S-transferase theta-3                    & Predicted to have glutathione transferase activity. Predicted to be involved in glutathione metabolic process.     \\
+
+& ENSRNOG00000008364 & Cat               & Catalase                       & Exhibits catalase activity. Involved in several processes, including hydrogen peroxide catabolic process; response to ozone; and response to vitamin. Localizes to several cellular components, including the Golgi apparatus; mitochondrial intermembrane space; and peroxisome. Used to study bacterial pneumonia; brain ischemia; cholestasis; colitis; and lung disease. Biomarker of several diseases, including artery disease (multiple); auditory system disease (multiple); end stage renal failure; eye disease (multiple); and neurodegenerative disease (multiple). Human ortholog(s) of this gene implicated in several diseases, including acatalasia; eye disease (multiple); lung disease (multiple); osteonecrosis; and pseudoxanthoma elasticum. Orthologous to human CAT (catalase).\\
+
+& ENSRNOG00000051682 & Zcchc9            & Zinc Finger CCHC-Type Containing 9     &  	Predicted to have nucleic acid binding activity and zinc ion binding activity. Predicted to be involved in negative regulation of phosphatase activity. Orthologous to human ZCCHC9 (zinc finger CCHC-type containing 9).                \\
+
+\hline
+\parbox[t]{2mm}{\multirow{6}{*}{\rotatebox[origin=c]{90}{Huan \textit{et al.}}}} & ENSRNOG00000053450 & Myadm             & Myeloid Associated Differentiation Marker   &     Predicted to be involved in several processes, including negative regulation of heterotypic cell-cell adhesion; negative regulation of macromolecule metabolic process; and negative regulation of protein kinase C signaling. Orthologous to human MYADM (myeloid associated differentiation marker).          \\
+
+& ENSRNOG00000003977 & Dusp1             & Dual Specificity Phosphatase 1                                &  	Exhibits growth factor binding activity and protein tyrosine/threonine phosphatase activity. Involved in several processes, including negative regulation of nitrogen compound metabolic process; regulation of apoptotic process; and response to testosterone. Localizes to the nucleus. Used to study Huntington's disease. Biomarker of several diseases, including anti-basement membrane glomerulonephritis; brain disease (multiple); hypertension; pancreatitis; and portal hypertension. Human ortholog(s) of this gene implicated in breast cancer. Orthologous to human DUSP1 (dual specificity phosphatase 1).\\
+
+& ENSRNOG00000004206 & Glrx5             & Glutaredoxin 5                       &  Predicted to have several functions, including 2 iron, 2 sulfur cluster binding activity; electron transfer activity; and protein disulfide oxidoreductase activity. Predicted to be involved in protein lipoylation. Localizes to the dendrite; neuronal cell body; and nucleus. Human ortholog(s) of this gene implicated in autosomal recessive pyridoxine-refractory sideroblastic anemia 3. Orthologous to human GLRX5 (glutaredoxin 5). \\
+
+& ENSRNOG00000021106 & Gramd1a           & GRAM Domain Containing 1A             &  Predicted to have cholesterol binding activity and cholesterol transfer activity. Predicted to be involved in cellular response to cholesterol. Orthologous to human GRAMD1A (GRAM domain containing 1A).                 \\
+
+& ENSRNOG00000020938 & Ppp1r15a          & Protein Phosphatase 1 Regulatory Subunit 15A &  Exhibits protein phosphatase 1 binding activity. Involved in several processes, including cellular response to nutrient levels; cellular response to organonitrogen compound; and regulation of cellular protein metabolic process. Localizes to the cytosol. Biomarker of brain ischemia and transient cerebral ischemia. Orthologous to human PPP1R15A (protein phosphatase 1 regulatory subunit 15A).                          \\
+
+& ENSRNOG00000013631 & Slc31a2           & Solute Carrier Family 31 Member 2             & Predicted to have copper ion transmembrane transporter activity. Predicted to be involved in cellular copper ion homeostasis and regulation of copper ion transmembrane transport. Orthologous to human SLC31A2 (solute carrier family 31 member 2).               
+\end{tabular}
+\caption[Additional information on candidate transcripts]{Additional information on candidate transcripts. Displayed here are the ensembl gene ID accession numbers alongside their associated gene name. Also displayed are the full gene names and descriptions; sourced from the Rat Genome Database \cite{Smith2020}.}
+\label{tab:candidatelistRNAseq}
+\end{sidewaystable}
+
+
+
+
+
+
+
+
+
+\subsection{qPCR Data}
+
+\subsubsection{Validation of Reference Genes for Normalisation}
+
+Analysis of putative reference genes in blood revealed a series of significant changes between the strains at both age groups. It should be noted that as there is no reference gene with which to normalise these data, all expression levels are left as unnormalised $C_{T}$ values, meaning a lower $C_{T}$ value denotes a higher abundance. Furthermore as these are $C_{T}$ values, each amplification cycle represents an exponential increase in abundance. Therefore a difference of 1 cycle translates to a doubling or halving of transcript abundance. 
+
+$\beta$-Actin showed a significant increase in abundance in the SHR within both age groups, at around 1 fold difference which approximately translates to a doubling in transcript abundance (Figure ~\ref{fig:qPCRRef}; Juvenile WKY vs SHR, -0.79 Fold, $\textit{P-Value=0.032}$; Adult WKY vs SHR, -1.01 Fold, $\textit{P-Value=0.038}$).
+
+A similar, but more significant difference was observed for GAPDH as SHR blood again saw an increase in its expression as compared with WKY blood (Figure ~\ref{fig:qPCRRef}; Juvenile WKY vs SHR, -0.94 Fold, $\textit{P-Value=0.022}$; Adult WKY vs SHR, -0.98 Fold, $\textit{P-Value=0.023}$).
+
+RPL19 showed the greatest change in abundance between the strains, at both ages. This was in the same direction as the other putative reference genes tested, but saw a greater magnitude of change (Figure ~\ref{fig:qPCRRef}; Juvenile WKY vs SHR, -1.04 Fold, $\textit{P-Value=0.008}$; Adult WKY vs SHR, -0.84 Fold, $\textit{P-Value$<$0.0001}$).
+
+Producing the Geometric Mean, by use of the BestKeeper software suite, did little to normalise the data towards consistent $C_{T}$ values across the groups. The $C_{T}$ values still saw a significant decrease when comparing SHR to WKY (Figure ~\ref{fig:qPCRRef}; Juvenile WKY vs SHR, -0.92 Fold, $\textit{P-Value=0.013}$; Adult WKY vs SHR, -0.907 Fold, $\textit{P-Value=0.0045}$). \\
+
+
+\begin{figure}[!hbtp]
+  \centering 
+  \begin{tabular}{ccc}
+  \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Actin.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/GAPDH.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/RPL19.pdf} \\
+  & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/GeometricMean.pdf} & \\
+\end{tabular} 
+  \caption[qPCR Relative Expression of Putative Reference genes in Blood]{qPCR $\Delta C_{T}$ values for putative reference genes; $\beta$-Actin, Glyceraldehyde 3-phosphate dehydrogenase (GAPDH), and 60S Ribosomal Protein L19 (RPL19). Statistics are presented as unpaired Student's T-Test P-values, between strains at any given age (P-value$<$0.05, *; P-value$<$0.01, **; P-value$<$0.001, ***).}
+  \label{fig:qPCRRef}
+\end{figure}
+
+
+\subsubsection{Biomarker Candidates} \label{candidatesqpcr}
+
+qPCR analysis on my selected transcripts revealed a series of changes taking place within the whole blood. Expression of Capza1 in the whole blood showed now significant differences between the strains at either age group (Figure ~\ref{fig:qPCRBlooda}a; Juvenile WKY vs SHR, +0.1 Fold, $\textit{P-Value=0.60}$; Adult WKY vs SHR, -0.1 Fold, $\textit{P-Value=0.55}$). Furthermore there was a much greater spread within the juvenile animals than in the adult animals, of either strain. 
+
+Expression levels of MYADM showed a significantly increased level in the SHR Juvenile as compared with the WKY. However this difference was not reflected in the adult cohort (Figure ~\ref{fig:qPCRBlooda}a; Juvenile WKY vs SHR, +0.36 Fold, $\textit{P-Value=0.04}$; Adult WKY vs SHR, +0.12 Fold, $\textit{P-Value=0.11}$).
+
+DUSP1 expression saw a significant decrease across the juvenile comparison. However this was not replicated within the adult comparison. The control WKY Juvenile group showed a much greater level of variation between each animal compared with the other groups whose expression levels were more stable (Figure ~\ref{fig:qPCRBlooda}a; Juvenile WKY vs SHR, -0.75 Fold, $\textit{P-Value=0.0051}$; Adult WKY vs SHR, -0.001 Fold, $\textit{P-Value=0.88}$). 
+
+Transcript levels of Glrx5 were elevated in the juvenile cohort as compared with the adult cohort, however no significance existed between the strains at either age group (Figure ~\ref{fig:qPCRBlooda}a; Juvenile WKY vs SHR, +0.01 Fold, $\textit{P-Value=0.96}$; Adult WKY vs SHR, +0.01 Fold, $\textit{P-Value=0.71}$). 
+
+Gramd1a showed a significant increase in transcript abundance in the juvenile SHR compared with the juvenile WKY. This change was not observed across the strains in the adult comparison (Figure ~\ref{fig:qPCRBlooda}a; Juvenile WKY vs SHR, +0.61 Fold, $\textit{P-Value=0.003}$; Adult WKY vs SHR, +0.02 Fold, $\textit{P-Value=0.90}$). 
+
+Neither age group showed a significant change in expression levels for Ppp1r15a in the blood (Figure ~\ref{fig:qPCRBlooda}a; Juvenile WKY vs SHR, +0.1 Fold, $\textit{P-Value=0.64}$; Adult WKY vs SHR, -0.01 Fold, $\textit{P-Value=0.83}$). 
+
+Ifit1 saw an incredibly significant and robust elevation in transcript abundance in the SHR as compared with the WKY. This was consistent in both the juvenile and adult age groups. However the increase was much more pronounced within the juvenile cohort (Figure ~\ref{fig:qPCRBlooda}b; Juvenile WKY vs SHR, +68.2 Fold, $\textit{P-Value$<$0.0001}$; Adult WKY vs SHR, +8.31 Fold, $\textit{P-Value$<$0.0001}$). 
+
+qPCR showed Ankrd35 levels to be significantly regulated between the strains, with SHR blood showing much higher levels of the transcript as compared with their age-matched controls. This increase in abundance was greater in magnitude within the juvenile cohorts, however was more tightly grouped within the adult comparison (Figure ~\ref{fig:qPCRBlooda}b; Juvenile WKY vs SHR, +3.31 Fold, $\textit{P-Value=0.0005}$; Adult WKY vs SHR, +0.544 Fold, $\textit{P-Value=0.0002}$). 
+
+SLC31A2 expression in the blood was not significantly different between either age group comparison. A slight increase in spread was observed within the SHR juvenile sample as compared with the WKY juvenile group (Figure ~\ref{fig:qPCRBlooda}b; Juvenile WKY vs SHR, -0.13 Fold, $\textit{P-Value=0.44}$; Adult WKY vs SHR, -0.05 Fold, $\textit{P-Value=0.29}$). 
+
+Expression of Gstt3 in whole blood showed a robust and significant elevation in the SHR vs the WKY in both age groups. Furthermore all groups showed a tight clustering of expression levels with the exception of the WKY juvenile group, where expression of Gstt3 appeared to greatly vary (Figure ~\ref{fig:qPCRBlooda}b; Juvenile WKY vs SHR, +43.4 Fold, $\textit{P-Value$<$0.0001}$; Adult WKY vs SHR, +14.8 Fold, $\textit{P-Value$<$0.0001}$).
+
+Levels of Cat remained relatively unchanged, with no significance reported from the unpaired Student's T-Test. Variation was much greater within the juvenile animals as compared with the adult animals, reaching an almost significant increase in the Juvenile SHR cohort (Figure ~\ref{fig:qPCRBlooda}b; Juvenile WKY vs SHR, +0.68 Fold, $\textit{P-Value=0.09}$; Adult WKY vs SHR, +0.03 Fold, $\textit{P-Value=0.57}$). 
+
+Zcchc9 showed a robust increase in the SHR vs the WKY across both age groups. This increase was much greater in magnitude in the juvenile comparison, compared with the adult comparison (Figure ~\ref{fig:qPCRBlooda}b; Juvenile WKY vs SHR, +5.89 Fold, $\textit{P-Value$<$0.0001}$; Adult WKY vs SHR, +0.47 Fold, $\textit{P-Value$<$0.0001}$). \\
+
+
+\begin{figure}[!hbtp]
+  \centering 
+  \subfloat[][]{\begin{tabular}{ccc}
+  \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Capza1.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/MYADM.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/DUSP1.pdf} \\
+  \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Glrx5.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Gramd1a.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Ppp1r15a.pdf} \\
+\end{tabular}}% 
+  \caption[qPCR Relative Expression of Blood Biomarkers]{Relative mRNA expression of Candidate Biomarkers in the whole blood of Wistar Kyoto (WKY) and Spontaneously Hypertensive Rats (SHR) at both 4- and 12 weeks of age. Here, expression is presented as $2^{-\Delta\Delta C_{T}}$, normalised to relative expression of $\beta$-Actin, using the WKY as the control group for each normalisation. Statistics are presented as unpaired Student's T-Test P-values, between strains at any given age (P-value$<$0.05, *; P-value$<$0.01, **; P-value$<$0.001, ***).}
+  \label{fig:qPCRBlooda}
+\end{figure}
+
+\begin{figure}[!hbtp]
+  \ContinuedFloat 
+  \centering 
+  \subfloat[][]{\begin{tabular}{ccc}
+  \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Ifit1.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Ankrd35.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/SLC31A2.pdf} \\
+  \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Gstt3.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Cat.pdf} & \includegraphics[width=0.3\textwidth]{chapter1/qPCR/Zcchc9.pdf} \\
+\end{tabular}} 
+  \caption[qPCR Relative Expression of Blood Biomarkers. Cont.]{Relative mRNA expression of Candidate Biomarkers in the whole blood of Wistar Kyoto (WKY) and Spontaneously Hypertensive Rats (SHR) at both 4- and 12 weeks of age. Here, expression is presented as $2^{-\Delta\Delta C_{T}}$, normalised to relative expression of $\beta$-Actin, using the WKY as the control group for each normalisation. Statistics are presented as unpaired Student's T-Test P-values, between strains at any given age (P-value$<$0.05, *; P-value$<$0.01, **; P-value$<$0.001, ***).}
+  \label{fig:qPCRBloodb}
+\end{figure} 
+
+\section{Discussion}
+
+\subsection{RNAseq Data}
+\subsubsection{Potential issues to QC Output}
+
+The first step following an RNAseq experiment, is to assess the quality of the resulting reads. From this QC step many of the raw .fastq read files flagged up as failing the various QC metrics FastQC assesses. While mean quality scores appeared consistently high (Phred Score$>$30) across the entire reads and per sequence, as well as the all reads having a low percentage N-count, the GC Content flagged up as a fail across all samples. Warnings to this module indicate a problem with the library itself and may have been resultant of either a specific contaminant (adapter dimers for example) or a contamination with a different species \cite{BabrahamBioinformatics}. Many of the potential issues that arose are dealt with by trimming adapters that are left on from the indexing stage of the library preparation. However, the trimming of reads failed to improve upon the GC content. 
+
+\subsection{qPCR Data}
+Having selected a series of potential biomarker candidates, qPCR provided a different experimental approach to validate both their biological validity in another cohort of animals, in addition to the RNAseq generated dataset itself. 
+
+One of the problems faced in any validation study is that of identifying a suitable housekeeping gene for the comparison. Quantitative RNA data are relative to both the total quantity and constituent transcripts contained within the extracted RNA. Therefore the reference genes used for standardization are of critical importance, and any analysis of the validity of qPCR data must consider the relevance of the genes selected for their ability to successfully normalise any discrepancies in the input RNA. 
+
+Initially RPL19 was investigated to normalise gene expression against. This was due to its previous usage as a reference gene by the laboratory within brain tissues and therefore primers were readily available \cite{Greenwood2015}. qPCR analysis of blood tissue showed significantly increased levels of RPL19 in the SHR compared with the WKY across both age groups. For this reason a suitable housekeeping gene that remained stable between the strains in blood tissue needed to be identified. Multiple studies have investigated the stability of reference genes in different tissues, but very few have done so in blood. It was for this reason that the putative reference genes; $\beta$-Actin and GAPDH were investigated. Both were significantly modulated across the strains and were therefore not suitable to normalise against. The Bestkeeper software produced by Pfaffl \textit{et al} (2004) allowed the coordination of all of the reference genes analysed to give a standardised geometric mean to compare the candidate genes against \cite{Pfaffl2004}. This approach resulted in a set of housekeeper values that were still significantly modulated in blood tissue across strains for both age groups. Moreover, the P-values obtained between the strains were more significant than those obtained for $\beta$-Actin alone, and so $\beta$-Actin was selected as the reference gene due to its comparably low significance. While this may not impact on the analysis of profoundly modulated gene expression, such as that observed for ifit1, it is of crucial importance to conclude with any confidence that the modulation is resultant of the experimental variable and not merely an inherent difference across the experimental groups.  Further efforts must be made in order to identify a stable housekeeper for future validation steps. This could be achieved by using more putative housekeeping genes to produce a more stable geometric mean. An alternative strategy could be to consult the RNAseq data to investigate the genes that were not significantly modulated between the strains. Once properly validated, this could provide a stable housekeeping gene to normalise against in future studies. 
+
+
+\subsection{Comparison of RNAseq and qPCR output} \label{Comparison of RNAseq and qPCR output}
+\subsubsection{False Discovery Rate} \label{False Discovery Rate}
+
+When comparing the RNAseq changes in gene expression with the qPCR analysis, multiple disparities were observed in either the fold change or level of significance (Table \ref{tab:RNAseqvsqPCR}, Table \ref{tab:fdr}).  Many of the changes statistically significant in the RNAseq data were not as significant in the qPCR findings and \textit{vice versa}. There are many reasons why this could be the case, all of which should be considered when interpreting these results. 
+
+\begin{sidewaystable}[]
+\scriptsize
+\centering
+\begin{tabular}{lrrrrrrrr|rr}
+                                      & \multicolumn{4}{c}{\textbf{DESeq}}                                             & \multicolumn{2}{c}{\textbf{EdgeR}} & \multicolumn{2}{c}{\textbf{DESeq2}} & \multicolumn{2}{c}{\textbf{qPCR}}\\
+                    \textbf{Gene Name} & \textbf{WKY.Avg} & \textbf{SHR.Avg} & \textbf{FC} & \textbf{P-Value} & \textbf{FC}   & \textbf{P-Value}   & \textbf{FC}    & \textbf{P-Value}  &   \textbf{FC}  & \textbf{P-Value}\\
+\hline
+ Capza1            & 85.87                 & 81.55                 & 0.95        & 1.00             & 1.00          & 1.00               & 0.95           & 0.92                & 1.1   & 0.60 \\
+ Ifit1             & 296.53                & 2324.18               & 7.84        & 1.30E-45         & 8.26          & 1.33E-25           & 7.47           & 1.70E-47            & 63.51 & $<$0.0001 \\
+ Ankrd35           & 0.60                  & 91.29                 & 151.25      & 2.16E-14         & 121.41        & 4.42E-23           & 20.44          & 3.09E-14            & 3.68  & 0.0005 \\
+ Gstt3             & 0.00                  & 132.70                & NA          & 1.60E-22         & 1464.58       & 2.78E-28           & 31.94          & 2.74E-18            & 28.47 & $<$0.0001 \\
+ Cat               & 11696.90              & 7572.97               & 0.65        & 0.09             & 0.68          & 0.01               & 0.65           & 1.16E-04            & 1.6   & 0.09 \\
+ Zcchc9            & 2.11                  & 37.30                 & 17.71       & 5.25E-04         & 17.93         & 5.67E-11           & 7.06           & NA                  & 6.67  & $<$0.0001 \\
+\hline
+ Myadm             & 43.34                 & 31.92                 & 0.74        & 1.00             & 0.77          & 0.27               & 0.75           & 0.51                & 1.35  & 0.04 \\
+ Dusp1             & 41.59                 & 35.33                 & 0.85        & 1.00             & 0.88          & 0.69               & 0.86           & 0.79                & 0.34  & 0.0051 \\
+ Glrx5             & 4888.10               & 2072.04               & 0.42        & 8.59E-08         & 0.45          & 7.55E-07           & 0.43           & 7.80E-12            & 1.01  & 0.96 \\
+ Gramd1a           & 48.59                 & 75.08                 & 1.55        & 1.00             & 1.60          & 0.03               & 1.48           & 0.23                & 1.58  & 0.003 \\
+ Ppp1r15a          & 594.23                & 834.08                & 1.40        & 0.47             & 1.47          & 0.01               & 1.39           & 0.01                & 1.09  & 0.64 \\
+ Slc31a2           & 5.54                  & 2.16                  & 0.39        & 1.00             & 0.42          & 0.39               & 0.65           & NA                  & 0.96  & 0.44
+\end{tabular}
+\caption[Comparison of RNAseq Output with qPCR Validation on Candidate Biomarkers]{Comparison of RNAseq Output with qPCR Validation on Candidate Biomarkers. \textit{N.B.} For DESeq2, the $log_{2}$ Fold Change values have been converted to the comparable fold change values. Furthermore, the "NA" P-Values issued by DESeq2 are returned due to a single sample with an extreme outlier (as detected by Cook's distance). }
+\label{tab:RNAseqvsqPCR}
+\end{sidewaystable}
+
+\begin{table}[!htbp]
+\small
+\centering
+\begin{tabular}{lrr}
+\textbf{\acrshort{dge} Test} & \textbf{No. of False Positives} & \textbf{\acrfull{fdr}} \\
+\hline
+DESeq & 1 & 0.14\% \\
+DESeq2  & 3 & 0.43\% \\
+EdgeR & 2 & 0.29\% \\
+\end{tabular}
+\caption[\acrfull{fdr} of RNAseq \acrfull{dge} tests.]{\acrfull{fdr} of RNAseq \acrfull{dge} tests, as calculated by False Positives (\acrshort{dge} P-Value$<$0.05 $\land$ qPCR P-Value$<$0.05) / True Positives (qPCR P-Value$<$0.05).}
+\label{tab:fdr}	
+\end{table}
+
+A potential source of variation may have arose from the method by which the libraries were prepared. Here libraries were depleted of rRNA by use of the Ribosomal Depletion method. A comparison of this method against a Poly(A) selection method of library preparation in blood has shown ribosomal depletion to lead to a higher percentage reads aligning to intronic regions \cite{Zhao2018}. The study finds that 220\% more reads would have to be sequenced in order to achieve the same level of exonic coverage when using rRNA depleted libraries as compared with Poly(A) selected libraries. As the focus of this study was primarily expression of mature transcripts, a Poly(A) selection method of library preparation may optimise the detection of reads aligning to exonic regions; utilising a greater percentage of the available read depth and ultimately improving upon the accuracy of resulting DGE calling.  
+
+One of the causes of disparity between the RNAseq output and the qPCR validation may find its roots in the poor QC output from the RNAseq reads, in particular the GC content. FastQC raised a failure flag across all reads for this metric and indicated the source of the error to be either adapter dimer contamination or a contamination from another species. Due to the width of the peaks across the distribution it suggests the latter is the case \cite{BabrahamBioinformatics}. 
+
+It should also be noted that these discrepancies may well be due to true biological differences between the samples and not a reflection of any bias inherent to the experimental method used to measure transcript expression. While these are both inbred rat strains, there will still exist a level of biological noise at these given sample numbers. It therefore becomes a question of replicates necessary to get the most out of the differential expression analysis. Experiments with a low number of replicates will often have poor statistical power to be able to resolve differentially expressed genes correctly and furthermore cannot account for natural biological noise \cite{Pan2002, Churchill2002}. With this in mind an experimenter could simply increase the number of replicates to improve upon statistical power and to ultimately improve upon correctly identifying differentially expressed transcripts. However the relatively high cost of RNAseq, coupled the drive for primary researchers to reduce the number of animals used, make this approach prohibitive. For this reason it seems pertinent to tease out the precise relationship between accurately resolving differentially expressed genes and the replicate number required to do so. A few studies have sought to answer this question. Two of which took publicly available RNAseq data from 21 clones of two separative strains of mouse \cite{Bottomly2011,Soneson2013,Burden2014}. Soneson \& Delorenzi (2013) compared various \acrshort{dge} tools and measured for a level of concordance between the tools' outputs in order to assess their suitability. They concluded none of the 11 DGE tools they assessed performed acceptably with fewer than 3 replicates \cite{Soneson2013}. Burden \textit{et al} use the metric of \acrshort{fdr} to rank five \acrshort{dge} tools, concluding that at least six replicates are required per condition to achieve a low FDR \cite{Burden2014}. 
+
+A study in 2016 was the first of its kind to use a much greater dataset of 48 biological replicates across 2 conditions in order to answer this question and provide guidelines for future RNAseq experiments \cite{Schurch2016}.The study continues to suggest that for future RNAseq experiments, at least 6 replicates per group should be considered with an optimum of 12 replicates per condition where identifying the majority of all DGE is required. Furthermore, they state that for experiments with $<$12 replicates per condition; EdgeR or DESeq2 is to be used. This is in accordance with studies that provide a much lower level of replication   
+
+\subsection{Concluding remarks}
+
+Here 3 biological replicates per strain are relied upon for the RNAseq analysis, which is confirmed by the qPCR validation to be greatly underpowered for detecting a series of robust differentially expressed transcripts. Further optimisation is therefore required in order to lay a firm foundation for additional validation of biomarkers of hypertension. 
+

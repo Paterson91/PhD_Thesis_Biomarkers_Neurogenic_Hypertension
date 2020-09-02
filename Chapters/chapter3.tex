@@ -1,0 +1,315 @@
+\doublespacing
+\section{Introduction}
+
+In this chapter, experiments have been designed to build upon previous findings by validating Ifit1 expression in a new cohort of animals from an isolated breeding colony. Furthermore, by using the optimised RNAseq dataset efforts can be made to identify and validate a novel reference gene for qPCR analysis. The expression profiles observed in this new cohort can then be linked to physiological changes taking place within the hypertensive rat strain to gain a direct correlation between physiological metrics and expression data.
+
+\subsection{Genetically Isolated Animal Cohort}
+
+The previous identification and validation of Ifit1 was conducted in a cohort of animals bred by a specific supplier, situated within the U.K. (Envigo). However, a notable level of behavioural and genetic differences have been observed within both the \acrshort{wky} and \acrshort{shr} strains, with differences often being attributable to the vendors and breeders from which they originate \cite{doi:10.1152/physiolgenomics.00002.2013}. As an extension of assessing Ifit1, and its ability to discern between a normotensive and hypertensive rat, the following experiments were conducted in animals from a geographically isolated breeding population at the Multidisciplinary Center for Biological Research (UNICAMP - São Paulo, Brazil). This was in order to discern whether these robust changes were common to other substrains and not simply a quirk of the substrains previously tested.  
+
+\subsection{Spectral Analysis \& Baroreceptor Sensitivity}
+
+With technological and mathematical advances, it has become possible for blood pressure readings to reveal more than simply systolic, diastolic blood pressure or heart beats per minute. Mean arterial pressure is a culmination of mainly; cardiac output and systemic vascular resistance. 
+
+In the early 1970's, Sayers \textit{et al.} measured the power spectrum of heart rates to elucidate their frequency content. The team showed that as well as the previously observed relationship between heart rate fluctuations and respiratory cycle, there are additional periodic fluctuations in heart rate that occur at lower frequencies \cite{Sayers1973,Chess1975}. Further work has shown that low-frequency peaks in heart rate fluctuations are related to cyclic fluctuations in peripheral vasomotor tone, whereas mid-frequency peaks are related to the frequency response of the baroreceptor reflex \cite{Hyndman1971}. 
+
+A decade later, Akselrod \textit{et al.} observed a link between drugs that autonomically modulate the heart, and fast frequency oscillations in the heart rate spectrum, suggesting the technique could be useful in the quantification of heart rate control via the \acrfull{ans} \cite{Akselrod1981}. 
+
+In humans and rats, three distinct frequency domains have been noted; Very Low Frequency (VLF; 0.0195 - 0.25Hz), Low Frequency (LF; 0.27-0.74Hz), and High Frequency (HF; 0.75 - 5Hz) \cite{doi:10.3109/10641969809053219}. Each of these components reflect a distinct aspect of physiological control of blood pressure. 
+
+The VLF component of blood pressure contains the majority of the signal spectra, and has been found to be reflective of multiple mechanisms of blood pressure regulation such as; myogenic tone, physical activity, temperature regulation, and efferent sympathetic outflow. Furthermore, various circulating or local vasoactive factors including Nitric Oxide, and Vasopressin have been found to alter the VLF spectra observed \cite{Japundzic-Zigon2002,Milutinovic2006,Tasic2017}.
+
+The LF oscillations of SBP, DBP, and the LF/HF ratio of HR are all recognised markers of sympathetic drive towards blood vessels and the sympatho-vagal balance within the heart, respectively \cite{Sarenac2011,taskforce,Parati1995}. Furthermore, the LF component can become especially predominant during cardiovascular stress, indicating a heightened sympathetic outflow and greater baroreflex response \cite{Japundzic-Zigon2002}. 
+
+HF components represent a more minor constituent of the total spectrum. For blood pressure, they reflect the respiratory effects on the large thoracic vessels. Within the heart rate spectrum, the HF domain constitutes the greatest power of the whole spectrum, and arises as a result of vagal-mediated regulation of heart rates due to respiration (e.g. Respiratory Sinus Arrhythmia) \cite{Japundzic-Zigon2002,doi:10.3109/10641969809053219}.
+
+Spectral analysis therefore serves to decompose these complex constituents of \acrshort{bp} and heart rate readings, and display them as a function of frequency (Figure \ref{fig:spectral}). The central methodology of spectral analysis can be reduced to either non-parametric (Fast Fourier Transformation) or parametric (Auto-regressive modelling), however these mostly provide similar outcomes \cite{doi:10.3109/10641969809053219}. Here, focus will be given to the LF component of blood pressure signalling, in an attempt to assess the sympathetic drive associated with biomarker expression.
+
+\begin{figure*}[!hbtp]
+\centering
+\begin{tabular}{c}
+  \includegraphics[width=1\textwidth]{chapter3/spectral_example.pdf}
+\end{tabular}
+\caption[Representative plot of blood pressure spectra]{Representative plot of blood pressure spectra illustrating the three distinct frequency domains observed following a Fast Fourier Transformation of blood pressure signal; Very Low Frequency (VLF; 0.0195 - 0.25Hz), Low Frequency (LF; 0.27-0.74Hz), and High Frequency (HF; 0.75 - 5Hz).}
+\label{fig:spectral}
+\end{figure*}
+
+%Baroreceptor sensitivity
+The baroreceptor reflex is an important regulator of the cardiovascular system. It functions to maintain arterial pressure within physiological levels through negative feedback, in order to maintain a homeostatic set point. Through baroreceptors in the aortic arch and carotid sinuses, detections of high blood pressure trigger afferent pathways towards the NTS. These signals ultimately culminate in modulating sympathetic and parasympathetic outflow, resulting in continuous alterations to stroke volume, heart rate, and systemic vascular resistance \cite{Chopra2011}.
+
+Many cardiovascular diseases have been associated with alterations towards baroreceptor sensitivity, for example; chronic heart failure, myocardial infarction, and obstructive sleep apnea \cite{Andrea1997,Ryan2007,LaRovere2001}. Within the study of hypertension, baroreceptor regulation has been shown to "reset" towards an elevated blood pressure set point and to function with a reduced sensitivity towards hypertension \cite{Mussalo2002}. 
+
+Here, spectral analysis and baroreceptor sensitivity analysis are employed in order to resolve additional information on the cause of hypertension in the \acrshort{shr}. Furthermore, to use these to see whether Ifit1 can be used as a correlative measure of spectral analysis or baroreceptor derived metrics of cardiovascular disease. 
+
+\section{Aims}
+To link transcript expression data at juvenile and adult ages with physiological measurements of blood pressure by;\\
+\begin{itemize}
+\singlespacing
+\setlength
+	\item Establishing an experimental design to gather direct blood pressure measurements from alive animals.\\
+	\item To make use of spectral analysis methods in order to tease out subtle differences in neurological control in blood pressure across the different ages. \\
+	\item To link these metrics back to transcript expression data to see whether their expression reflects physiological changes taking place. \\
+	\item To make use of the previously obtained RNAseq data to select a novel reference gene for further qPCR normalisation. \\
+\end{itemize}
+
+\doublespacing
+\section{Materials and Methods}
+
+\subsection{Animals}
+All animals used for the following procedures were sourced from the Multidisciplinary Center for Biological Research (UNICAMP - São Paulo, Brazil). Their usage adhered to the Guide for the Care and Use of Laboratory Animals from the National Academy of Sciences, published by the National Institute of Health (Copyright \textcopyright\ 1996 by the National Academy of Sciences) and was ethically approved by the Committee of Ethics in Animal Research from Ribeirão Preto Medical School, University of São Paulo, SP, Brazil. All animals were housed individually with \textit{ad libitum} access to food and water, and were maintained on a 12 hour light-dark cycle at a maintained temperature of 21$\degree$C.
+
+\subsection{Surgical Procedure}
+Rats were initially anesthetized with a mixture of ketamine (50mg/kg, I.P.; União Química Farmacêutica Nacional S/A, Embu-Guaçu, SP, Brazil) and Xylazine (10mg/kg, I.P.; Hertape Calier Saúde animal S/A, Juatuba, MG, Brazil), and implanted with a polyethylene catheter (PE-50 attached to PE-10, Becton Dickinson, Sparks, MD, U.S.A.) into the left femoral artery. The catheters were tunneled via the subcutaneous space and through an incision in the interscapular region of the animals' nape. 
+
+\subsection{Direct Blood Pressure Measurement}
+After 48 hours recovery from the surgical procedures, the arterial lines from the animals were connected to a pressure transducer (MlT844, ADInstruments - Bella Vista, NSW, Australia) attached to a Bridge Amplifier (FE221, ADInstruments - Bella Vista, NSW, Australia). Animals were housed individually and allowed to freely roam their cages as arterial pressure was continuously sampled at a rate of 2kHz for 30 minutes in an IBM/PC through an analogic to digital interface (Power Lab 4/40, ADInstruments - Bella Vista, NSW, Australia).
+
+Using a three-way valve within the measurement apparatus, a bisecting section of tubing attached to a pump and pressure meter was used to make measurements at various defined pressures to calibrate the resulting mV signal range detected by the amplifier. These values were then used to calibrate the signals for each rat, enabling a conversion to be made from detected mV to an interpretable mmHg. From this, an average MAP, SBP, DBP and BPM could be drawn from stable regions of signal.
+
+\subsection{Spectral Analysis \& Baroreceptor Sensitivity}
+Prior to spectral analysis, BP and HR signals were re-sampled at 20Hz and processed with a nine-point Hanning window filter and linear trend removal as detailed by Japundžic-Žigon \textit{et al.} \cite{Japundzic-Zigon2001}. Using a \acrfull{fft}, spectra could be obtained across 15 overlapping 2048-point time series. This corresponded to 410 seconds (approximately 7 minutes) of sampling time for SBP, DBP, and HR. The power spectrum for BP ($mmHg^{2}$) and HR ($BPM^{2}$) was calculated for 30 FFT segments across the whole spectrum (0.0195-3Hz) and for the following frequency ranges; High Frequency (\acrshort{hf}, 0.8-3Hz), Low Frequency (\acrshort{lf}, 0.195-0.8Hz), and Very Low Frequency (\acrshort{vlf}, 0.0195-0.195Hz). BP and HR spectra were then expressed in normalised units in order to assess spectral frequency distribution. The oscillation of LF signal for SBP, DBP, and LF/HF HR are established biomarkers of sympathetic regulation of vascular tone and sympathovagal balance to the heart, respectively \cite{Parati1995,taskforce}. 
+
+Here the Spontaneous Baroreceptor Reflex by the sequence method was employed to scan the signal for consecutively increasing/decreasing SBP samples, followed by a series of increasing/decreasing \acrfull{pi} samples that were delayed by 3 - 5 beats with respect to SBP. A threshold of sequence length was set to 4 beats \cite{Mussalo2002}. Using in-house developed software (BP Complete), baroreceptor sensitivity (in ms $mmHg^{-1}$) was asssessed as a mean linear regression coefficient (PI = BRS x SBP + Constant; where fitting of the regression model is conducted using the "sum of least squares" method). Baroreceptor set point for SBP (in mmHg) was calculated as the median value of all SBP-PI sequence points, as defined in Bajić \textit{et al.} \cite{Bajic2010}. Comparison of baroreceptor sensitivity and set point between the strains at either age was conducted as an unpaired Student's T-Test.
+
+\subsection{Linear Regression Modeling}
+
+Linear regression modeling was conducted on raw Ifit1 $C_{T}$ levels against various physiological metrics measured here using GraphPad Prism (Version 7.0, La Jolla California USA, \cite{graphpad}). The software iteratively calculated the values of slope and intercept of several overlaid linear lines of best fit, in order to produce a regression model that minimises the sum of squares of the vertical distances of the points from the line. 
+
+\subsection{New qPCR Reference Gene Selection} \label{New qPCR Reference Gene Selection}
+
+In order to normalise the final abundance measurements from the $2^{-\Delta\Delta C_{T}}$ technique, as outlined in section \ref{qPCR of Target Genes}, it is essential to identify a suitable reference gene. A literature review revealed very little in the way of suitable blood-based reference genes so as well as the putative reference genes commonly used in other tissue types ($\beta$-actin, GAPDH, RPL19), a new reference gene was essential for determining an accurate $2^{-\Delta\Delta C_{T}}$ comparison of transcript expression levels. 
+
+Since there was a wealth of high throughput sequencing data available, it was pertinent to check which transcripts were most stable between the two strains in the RNAseq data. To achieve this, a \acrfull{cv} was calculated for each gene across all of the normalised counts for each sample (Figure \ref{eq:cv}). 
+
+\begin{figure}[!hbtp]
+\large
+\[Coefficient\ of\ Variance (CV\%) = \frac{Standard\ Deviation}{Mean}\]\\
+\normalsize
+\caption[Equation for calculating the Coefficient of Variance]{Equation for calculating the Coefficient of Variance across all reads of any given gene}
+\label{eq:cv}
+\end{figure}
+
+Genes were then ranked according to the lowest CV to give a final list of genes that show the lowest amount of variation across all of the samples from both strains (Table. ~\ref{table:RNAseqGenCV}). Also displayed are some of the common reference genes employed by the laboratory for various tissue types.
+
+%\vspace{1cm}
+\begin{table}[!hbtp]
+\small
+\centering
+\begin{tabular}{l | c}
+Gene  & Coefficient of Variance (\textit{CV}) \\
+\hline
+Pink1 & \textit{7.05\%} \\
+Slc25a39 & \textit{7.55\%} \\
+Abhd4 &  \textit{7.59\%} \\
+Rnf10 &  \textit{7.66\%} \\
+\textbf{Oaz1} &  \textbf{\textit{7.79\%}} \\
+ & \\
+Gapdh &  \textit{22.27\%} \\
+$\beta$-Actin &  \textit{16.46\%} \\
+RPL19 &  \textit{33.47\%} \\
+\end{tabular}
+\caption[RNAseq Generated Coefficient of Variance for selecting new reference genes]{RNAseq Generated \acrfull{cv} as calculated via the equation outlined in the equation in Figure \ref{eq:cv}. Calculated \acrshort{cv} values were then ranked from smallest to largest. Here, Oaz1 is highlighted as the reference gene selected for further validation. Also featured are the corresponding \acrshort{cv} values for common putative reference genes.} 
+\label{table:RNAseqGenCV}	
+\end{table}
+
+\section{Results}
+
+\subsection{Validation of Findings in a New Cohort of Animals}
+
+\subsubsection{qPCR Validation of Novel Reference Genes}
+
+\begin{figure*}[!hbtp]
+\centering
+\begin{tabular}{ccc}
+  \includegraphics[width=0.3\textwidth]{chapter3/OAZ1qPCR.pdf} & \includegraphics[width=0.3\textwidth]{chapter3/GAPDHqPCR.pdf} \includegraphics[width=0.3\textwidth]{chapter3/ActqPCR.pdf} \\
+\end{tabular}
+\caption[qPCR Blood Expression of Putative reference genes and the novel Oaz1 reference gene across \acrfull{wky} and \acrfull{shr}]{qPCR Blood Expression of Putative reference genes and the novel Oaz1 reference gene across \acrfull{wky} and \acrfull{shr}. Expression is displayed here as $2^{-\Delta C_{T}}$ normalised values for GAPDH, $\beta$-Actin, and the novel Oaz1 reference gene, in addition to the \acrfull{sem} for juvenile and adult strains. Statistical analysis made use of two-way \acrfull{anova} with Tukey's multiple test correction. (P-Value $<$0.05, *; $<$0.01, **; $<$0.001, ***).}
+\label{fig:qPCR Reference Genes}
+\end{figure*}
+
+\begin{figure*}[!hbtp]
+\centering
+\includegraphics[width=0.5\textwidth]{chapter3/OAZ1qPCRResults.pdf}
+\caption[Rescaled plot of Oaz1 expression in Blood]{Rescaled qPCR Blood Expression of Oaz1 reference gene across \acrfull{wky} and \acrfull{shr}. Expression is displayed here as $2^{-\Delta C_{T}}$ normalised values for Oaz1 reference, in addition to the \acrfull{sem} for juvenile and adult strains.Statistical analysis made use of two-way \acrfull{anova} with Tukey's multiple test correction. (P-Value $<$0.05, *; $<$0.01, **; $<$0.001, ***).}
+\label{fig:OAZ1 Expression}
+\end{figure*}
+
+Despite normalisation of total input RNA concentration during the cDNA synthesis stage of sample preparation, a clear difference in expression levels exist across either the strains or age groups for both GAPDH and $\beta$-Actin (Figure ~\ref{fig:qPCR Reference Genes}). $\beta$-Actin saw the greatest level of change across the age groups, and across the comparison of \acrfull{wky} \textit{versus} \acrfull{shr} at the adult age group (Figure ~\ref{fig:qPCR Reference Genes}; Juvenile WKY vs SHR, -0.85 Fold, $\textit{P-Value=0.32}$; Adult WKY vs SHR, -3.87 Fold, $\textit{P-Value$<$0.0001}$; WKY Juvenile vs Adult, -3.2 Fold, $\textit{P-Value$<$0.0001}$). 
+
+The expression levels of GAPDH were much greater in the adult cohort as compared with the juveniles. However, there was no significant difference between the two strains at any given age. Furthermore, the juvenile cohort showed a much tighter spread of expression values, as compared with the spread observed within the adults (Figure ~\ref{fig:qPCR Reference Genes}; Juvenile WKY vs SHR, +0.59 Fold, $\textit{P-Value=0.83}$; Adult WKY vs SHR, +0.58 Fold, $\textit{P-Value=0.89}$; WKY Juvenile vs Adult, +2.79 Fold, $\textit{P-Value=0.001}$). 
+
+The levels of expresion observed for the Oaz1 appear much more stable across the experimental groups after a two-way \acrshort{anova} (Figure ~\ref{fig:qPCR Reference Genes}). Amending the scale for the Oaz1 expression plot shows the levels of variation between the groups (Figure \ref{fig:OAZ1 Expression}). There appears a lower level of expression within hypertensive or aged animals, however this is not significant in the juvenile or adult cohorts, as a high level of intra-group variation exists (Figure ~\ref{fig:OAZ1 Expression}; Juvenile WKY vs SHR, -0.22 Fold, $\textit{P-Value=0.35}$; Adult WKY vs SHR, -0.32 Fold, $\textit{P-Value=0.15}$; WKY Juvenile vs Adult, -0.35 Fold, $\textit{P-Value=0.12}$). 
+
+
+\subsubsection{qPCR Validation of Ifit1 in New cohort of Animals} \label{qPCR Validation of Ifit1 in New cohort of Animals} 
+
+\begin{figure*}[!hbtp]
+\centering
+\begin{tabular}{ccc}
+  \includegraphics[width=0.4\textwidth]{chapter3/OAZ1_NormIfit1qPCR.pdf} & \includegraphics[width=0.4\textwidth]{chapter3/Raw_Ifit1.pdf} \\
+\end{tabular}
+\caption[qPCR blood expression of Ifit1 across new cohort of \acrfull{wky} and \acrfull{shr} animals]{qPCR blood expression of Ifit1 across new cohort of \acrfull{wky} and \acrfull{shr} animals. Here expression is displayed as both Oaz1 normalised $2^{-\Delta\Delta C_{T}}$ values and raw (unnormalised) Ifit1 $2^{-\Delta C_{T}}$ values. Statistics are presented as Two-way ANOVA P-values, between strains at any given age (P-value$<$0.05, *; P-value$<$0.01, **; P-value$<$0.001, ***).}
+\label{fig:Ifit1 Expression in New Cohort of animals}
+\end{figure*}
+
+
+qPCR analysis of the Ifit1 expression showed a similar, and hugely robust, profile of change as within other animal cohorts sourced from other suppliers (Figure ~\ref{fig:Ifit1 Expression in New Cohort of animals}). Here the strain differences were much more severe at both ages. This observation was further exagerated when normalised to the newly identified Oaz1 reference gene than when not normalised at all. Regardless of normalisation strategy, the differences in Ifit1 blood expression are compelling within the Brazilian cohort of animals (Figure ~\ref{fig:Ifit1 Expression in New Cohort of animals}; Juvenile WKY vs SHR, -0.22 Fold, $\textit{P-Value=0.35}$; Adult WKY vs SHR, -0.32 Fold, $\textit{P-Value=0.15}$; WKY Juvenile vs Adult, -0.35 Fold, $\textit{P-Value=0.12}$). 
+
+
+\subsection{Physiological metrics}
+
+\subsubsection{Blood Pressure}
+
+Direct physiological measurements revealed a series of novel and expected patterns across the experimental groups (Figure ~\ref{fig:PhysiologicalMetrics}). A clear and statistically significant difference in MAP exists between the adult WKY and SHR animals, as to be expected from this well established comparison (\textit{P$<$0.0001}). The comparison between the juvenile WKY and SHR animals showed the SHR to have a significantly elevated blood pressure as compared with their normotensive and age-matched WKY controls (\textit{P$<$0.0001}). 
+
+\begin{figure*}[!htbp]
+\centering
+  \includegraphics[width=1\textwidth]{chapter3/physiologicalmetrics.pdf} \\
+\caption{Physiological data in SHR and WKY strains at both juvenile and adult ages. Statistics are presented as unpaired Student's T-Test P-values, between strains at any given age (P-value$<$0.05, *; P-value$<$0.01, **; P-value$<$0.001, ***).}
+\label{fig:PhysiologicalMetrics}
+\end{figure*}
+
+\subsubsection{Spectral Analysis}
+
+Here, spectral analysis revealed a significant increase in the LF domain of the BP spectra within the SHR animals compared with their normotensive controls in the adult cohort. This profile was consistent between SBP and DBP (Figure \ref{fig:spectral}, SBP, Juvenile WKY vs SHR, \textit{P=0.25}; Adult WKY vs SHR \textit{P$<$0.0001}, DBP, Juvenile WKY vs SHR, \textit{P=0.08}; Adult WKY vs SHR, \textit{P$<$0.0001}). Furthermore, a significant increase is observed within the LF/HF ratio of the HR for the Adult cohort only, pointed to an increased sympathetic output to the heart(Figure \ref{fig:spectral}, Juvenile WKY vs SHR, \textit{P=0.85}; Adult WKY vs SHR \textit{P=0.002}). 
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{c}
+  \includegraphics[width=1\textwidth]{chapter3/spectralanalysis.pdf}
+\end{tabular}
+\caption[Spectral Analysis for \acrshort{wky} \textit{versus} \acrshort{shr} comparison]{Spectral Analysis for \acrshort{wky} \textit{versus} \acrshort{shr} comparison. Statistics are presented as unpaired Student's T-Test P-values, between strains at any given age (P-value$<$0.05, *; P-value$<$0.01, **; P-value$<$0.001, ***).}
+\label{fig:spectral}
+\end{figure*}
+
+
+\subsubsection{Baroreceptor Sensitivity}
+
+Results from the analysis of the baroreceptor set point showed a clear increase in the \acrshort{shr} \textit{versus} the \acrshort{wky} across both ages tested (Figure \ref{fig:baroreceptor}). Data points were clustered tightly and therefore resulted in a robustly significant P-Value from the Student's T-Test analysis (Juvenile WKY vs SHR, \textit{P$<$0.0001}; Adult WKY vs SHR \textit{P$<$0.0001}). Analysis of baroreceptor sensitivity saw a similarly robust difference, with \acrshort{shr} animals seeing a significantly reduced baroreceptor sensitivity compared to the \acrshort{wky} animals (Figure \ref{fig:baroreceptor}). This was consistent across both ages (Juvenile WKY vs SHR, \textit{P=0.0003}; Adult WKY vs SHR \textit{P$<$0.0001}). 
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{c}
+  \includegraphics[width=1\textwidth]{chapter3/BaroreceptorReflex.pdf}
+\end{tabular}
+\caption[Baroreceptor Sensitivity ($mmHg^{-1}$) and Set Point ($mmHg^{-1}$) for \acrshort{wky} \textit{versus} \acrshort{shr} comparison]{Baroreceptor Sensitivity ($mmHg^{-1}$) and Set Point ($mmHg^{-1}$) for \acrshort{wky} \textit{versus} \acrshort{shr} comparison. Statistics are presented as unpaired Student's T-Test P-values, between strains at any given age (P-value$<$0.05, *; P-value$<$0.01, **; P-value$<$0.001, ***).}
+\label{fig:baroreceptor}
+\end{figure*}
+
+
+\subsubsection{Correlation with Ifit1 expression levels}
+
+In order to deduce whether Ifit1 expression levels could be used as a direct measurement of blood pressure, linear regression modelling was employed using the Oaz1 normalised $2^{-\Delta\Delta C_{T}}$ values. Global regression modelling revealed little correlation between Ifit1 expression and \acrshort{map}, with a low $R^{2}$ value and relatively neutral slope coefficient (Figure \ref{fig:Ifit1vsphysiology_map}). Due to the distinct groupings being observed on the scatter graph, this analysis was repeated on subsets of the data, taken for either \acrshort{wky}, \acrshort{shr}, Juvenile or Adult. 
+
+The \acrshort{shr} subset saw by far the greatest $R^{2}$ value, denoting the best "Goodness of Fit" for the regression model (Figure ~\ref{fig:Ifit1vsphysiology_map}; SHR, $R^{2}$ = 0.77, Slope = -0.16 (95\% \acrshort{ci} ± 0.02); WKY, $R^{2}$ = 0.03, Slope = -10.42 (95\% \acrshort{ci} ± 21.46)). However, as the juvenile \acrshort{shr} animals had the highest expression of Ifit1 and lower \acrshort{map} than the adult SHRs, this slope followed a negative coefficient of -0.16.
+
+When the strains were separated based on age groups, a positive regression model was observed in both sets. However, both the $R^{2}$ and slope coefficients were relatively modest for these subsets (Figure ~\ref{fig:Ifit1vsphysiology_map}; All Adult, $R^{2}$ = 0.57, Slope = 1.32 (95\% \acrshort{ci} ± 0.38); All Juvenile, $R^{2}$ = 0.21, Slope = 0.08 (95\% \acrshort{ci} ± 0.04)).
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cc}
+  \includegraphics[width=0.5\textwidth, align=c]{chapter3/MAP_regression.pdf} & \includegraphics[width=0.5\textwidth, align=c]{chapter3/Age_MAP_Regression.pdf} \\
+\end{tabular}
+\caption[Linear Regression Analysis of Physiological \acrshort{map} against Ifit1 blood expression]{Linear Regression Analysis of Physiological \acrfull{map}, as \acrfull{mmhg}, against Oaz1 normalised Ifit1 blood expression $2^{-\Delta\Delta C_{T}}$ values. For the regression model, displayed here are the slope coefficient of the regression line and the $R^{2}$ correlation coefficient. Also highlighted in grey is the 95\% \acrfull{ci} range for the model. Note the rescaled x-axis for the \acrshort{wky} plot.}
+\label{fig:Ifit1vsphysiology_map}
+\end{figure*}
+
+The linear regression analysis of Ifit1 blood expression against beats per minute (BPM) for all samples showed a stronger positive correlation. While the slope coefficient was modest, its accompanying $R^{2}$ value indicated a greater "Goodness of Fit" (Figure ~\ref{fig:Ifit1vsphysiology_bpm}; $R^{2}$ = 0.57, Slope = 0.31 (95\% \acrshort{ci} ± 0.05)).
+
+Splitting this regression between the WKY and SHR strains, the SHR again saw a much stronger $R^{2}$ value for its positive correlation (Figure ~\ref{fig:Ifit1vsphysiology_bpm}; SHR, $R^{2}$ = 0.57, Slope = 0.26 (95\% \acrshort{ci} ± 0.06); WKY, $R^{2}$ = 0.02, Slope = -18.13 (95\% \acrshort{ci} ± 48.91))
+
+Again, samples were further split into juvenile and adult subsets to assess whether Ifit1 saw a greater correlation within a specific age group. The resulting regression results were broadly comparable in terms of their $R^{2}$ values, however the adult cohort saw a subtle increase in the slope coefficient of the regression model (Figure ~\ref{fig:Ifit1vsphysiology_bpm}; All Adult, $R^{2}$ = 0.53, Slope = 1.67 (95\% \acrshort{ci} ± 0.52); All Juvenile, $R^{2}$ = 0.60, Slope = 0.24 (95\% \acrshort{ci} ± 0.05)).
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.5\textwidth, align=c]{chapter3/BPM_Regression.pdf} & \includegraphics[width=0.5\textwidth, align=c]{chapter3/Age_BPM_Regression.pdf} \\
+\end{tabular}
+\caption[Linear Regression Analysis of Physiological \acrshort{bpm} against Ifit1 blood expression]{Linear Regression Analysis of Physiological \acrfull{bpm} against Oaz1 normalised Ifit1 blood expression $2^{-\Delta\Delta C_{T}}$ values. For the regression model, displayed here are the slope coefficient of the regression line and the $R^{2}$ correlation coefficient. Also highlighted in grey is the 95\% \acrfull{ci} range for the model. Note the rescaled x-axis for the \acrshort{wky} plot.}
+\label{fig:Ifit1vsphysiology_bpm}
+\end{figure*}
+
+Baroreceptor sensitivity was plotted against blood expression of the transcript. Making use of all datapoints, from both ages and strains, regression modelling revealed little relationship between the two metrics (Figure ~\ref{fig:Ifit1vsphysiology_brs}; $R^{2}$ = 0.04, Slope = -0.005 (95\% \acrshort{ci} ± 0.004); SHR, $R^{2}$ = 0.09, Slope = 0.003 (95\% \acrshort{ci} ± 0.003); WKY, $R^{2}$ = 0.0007, Slope = 0.19 (95\% \acrshort{ci} ± 2.71); All Adult, $R^{2}$ = 0.36, Slope = -0.04 (95\% \acrshort{ci} ± 0.02); All Juvenile, $R^{2}$ = 0.24, Slope = -0.01 (95\% \acrshort{ci} ± 0.006)). All of the various subsets taken saw a low level of "Goodness of Fit", aside from the Adult subsection which had the highest $R^{2}$ value of 0.36. \\
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cc}
+  \includegraphics[width=0.5\textwidth, align=c]{chapter3/BRS.pdf} & \includegraphics[width=0.5\textwidth, align=c]{chapter3/BRS_Age.pdf} \\
+\end{tabular}
+\caption[Linear Regression Analysis of Physiological \acrshort{brs} against Ifit1 blood expression]{Linear Regression Analysis of Physiological \acrfull{brs}, as ms $mmHg^{-1}$, against Oaz1 normalised Ifit1 blood expression $2^{-\Delta\Delta C_{T}}$ values. For the regression model, displayed here are the slope coefficient of the regression line and the $R^{2}$ correlation coefficient. Also highlighted in grey is the 95\% \acrfull{ci} range for the model. Note the rescaled x-axis for the \acrshort{wky} plot.}
+\label{fig:Ifit1vsphysiology_brs}
+\end{figure*}
+
+Linear regression modeling of Ifit1 against the Baroreceptor Set Point revealed little correlation when considering all animals of both ages, aside from the adult cohort (Figure ~\ref{fig:Ifit1vsphysiology_brsetpoint}; $R^{2}$ = 0.004, Slope = -0.02 (95\% \acrshort{ci} ± 0.07); SHR, $R^{2}$ = 0.69, Slope = -0.24 (95\% \acrshort{ci} ± 0.04); WKY, $R^{2}$ = 0.01, Slope = 4.04 (95\% \acrshort{ci} ± 13.14); All Adult, $R^{2}$ = 0.64, Slope = 2.72 (95\% \acrshort{ci} ± 0.72); All Juvenile, $R^{2}$ = 0.16, Slope = 0.09 (95\% \acrshort{ci} ± 0.06)). \\
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cc}
+  \includegraphics[width=0.5\textwidth, align=c]{chapter3/BRSetPoint.pdf} & \includegraphics[width=0.5\textwidth, align=c]{chapter3/BRSetPoint_Age.pdf} \\
+\end{tabular}
+\caption[Linear Regression Analysis of Physiological Baroreceptor Set Point against Ifit1 blood expression]{Linear Regression Analysis of Physiological Baroreceptor Set Point, as $mmHg^{-1}$, against Oaz1 normalised Ifit1 blood expression $2^{-\Delta\Delta C_{T}}$ values. For the regression model, displayed here are the slope coefficient of the regression line and the $R^{2}$ correlation coefficient. Also highlighted in grey is the 95\% \acrfull{ci} range for the model. Note the rescaled x-axis for the \acrshort{wky} plot.}
+\label{fig:Ifit1vsphysiology_brsetpoint}
+\end{figure*}
+
+Metrics for spectral analysis of sympathetic activity saw very little correlation with Ifit1 expression in the blood. (Figure ~\ref{fig:Ifit1vsphysiology_spectral}; SBP LF $R^{2}$ = 0.004, Slope = 0.003 (95\% \acrshort{ci} ± 0.008); DBP LF, $R^{2}$ = 0.02, Slope = 0.003 (95\% \acrshort{ci} ± 0.004); $HR^{LF/HF}$, $R^{2}$ = 0.007, Slope = -0.0001 (95\% \acrshort{ci} ± 0.0004)). \\
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cc}
+  \includegraphics[width=1\textwidth]{chapter3/SpectralRegression.pdf} \\
+\end{tabular}
+\caption[Linear Regression Analysis of Spectral Analysis Data against Ifit1 blood expression]{Linear Regression Analysis of Spectral Analysis Data, against Oaz1 normalised Ifit1 blood expression $2^{-\Delta\Delta C_{T}}$ values. Here, Systolic blood pressure (SBP) and Diastolic blood pressure (DBP) Low Frequency spectra are used (LF; 0.27-0.74Hz, $mmHg^{2}$). Also displayed is the linear regression for heart rate (HR) ratio of LF to High Frequency (HF; 0.75 - 5Hz, $HR^{LF/HF}$). For the regression model, displayed here are the slope coefficient of the regression line and the $R^{2}$ correlation coefficient. Also highlighted in grey is the 95\% \acrfull{ci} range for the model. Note the rescaled x-axis for the \acrshort{wky} plot.}
+\label{fig:Ifit1vsphysiology_spectral}
+\end{figure*}
+
+\section{Discussion}
+
+\subsection{Methods of Obtaining Blood Pressure Readings}
+There exist three main methods of assessing blood pressure in a rat; radio telemetry, intra-arterial catheters, and tail cuff plethysmography. Each present their own advantages and disadvantages that must be considered for any experiment. Both radio telemetry and intra-arterial catheters are invasive methods of obtaining real time blood pressure readings, with intra-arterial yielding the most precise values \cite{Plehm2006}. The non-invasive tail cuff method requires animals to be handled and restrained for the period of measurement which may lead to falsely elevated blood pressure readings, as demonstrated in both mouse and rat studies \cite{Wilde2017,Irvine1997}. Indeed, restraint stress has been used extensively as a method of inducing acute increases in blood pressure \cite{Sarenac2011}. Therefore, and further to the additional precision, invasive blood pressure measurements are best suited for obtaining stabilised blood pressure readings, by mitigating the stress responses seen in the conscious rat. 
+
+\subsection{Physiological Metrics of the SHR}
+
+Direct blood pressure measurements in juvenile animals revealed an interesting significant increase in \acrshort{map} in the \acrshort{shr} compared with the \acrshort{wky}. This is contrary to the previous assumption that the 4-week old age presented a pre-hypertensive time point in the \acrshort{shr}. During the literature review conducted prior to the experiments outlined in section \ref{candidatesqpcr}, multiple development profiles of when hypertension began were reported, ranging from 5-weeks to 7-weeks \cite{NAP20031,Yamori1984}. 
+
+%Baroreceptor Reflex \\
+Analysis of the baroreceptor reflex showed a pattern consistant with the literature, for both baroreceptor set point and sensitivity. Multiple studies have noted the elevated set point within the SHR model of hypertension, and further observed a similar pattern in humans exhibiting chronically elevated blood pressure \cite{Sarenac2011,Narkiewicz2008}.The same is true with baroreceptor set point, with many using these key physiological metrics as a way of highlighting the suitability of the SHR model for human hypertension \cite{Monteiro2012,Bertagnolli2006}. The observation that baroreceptor set point was higher in the SHR, and sensitivity was blunted amongst these hypertension animals, was therefore expected in this cohort of animals and well supported from the literature. 
+
+What is less clear from the literature, is the age at which these changes appear to occur in the SHR model. Here, the juvenile cohort were 4 weeks old at the time of analysis. Considering the significant changes in blood pressure for these juvenile animals, it is not surprising that alterations are taking place to the baroreceptor response. However, changes in baroreceptor function have previously only been noted in animals as young as 8 weeks of age \cite{Cisternas2010,Andresen1980,Parati1995}. 
+
+%Spectral analysis \\
+This study made use of Spectral analysis derived LF spectra, in order to assess the sympathetic modulation of blood pressure regulation. For both the adult SHRs, SBP and DBP LF spectra were higher than in their age-matched controls. The observations that these metrics are significantly elevated in the SHR strain are well documented in the literature, as multiple studies have characterised the elevated sympathetic outflow in this model of hypertension \cite{Chopra2011,Akselrod1981}. Again, there does appear to be a disparity between the literature and these findings in terms of age. While sympathetic activation is known to precede the onset of hypertension, a rise in sympathetic outflow has only been noted in animals as young as 6 weeks \cite{doi:10.1046/j.1440-1681.2003.03852.x}. Here, physiological data shows the onset of hypertension as young as 4 weeks old and so an accompanying rise in sympathetic outflow is to be expected. However, a significant modulation towards sympathetic outflow was not observed in these animals through this analysis.  
+
+For these reasons, it may be necessary to take \acrshort{shr} animals at a younger age and compare them with age matched \acrshort{wky}s in order to truly study biomarker expression during the development of the disease. Currently, juvenile animals are obtained at 3-weeks of age and habituated on site for a week to ensure no confounding experimental effects due to elevated stress of shipment. This presents several potential problems however, notably the availability of animals younger than 3-weeks of age as suppliers do not recommend weaning prior to this age. Indeed, several studies have found direct effects of weaning on long-term physiological phenotypes \cite{PRYCE200357}. These maternal deprivations can have prolonged effects on stress hormones critical in blood pressure regulation \cite{doi:10.1002/dev.420240803,Mangos2000}. The disparities observed for age of onset of hypertension, and indeed the other physiological hallmarks that accompany it, may well be down to the genetic variation in the SHR strain, as explored later in section \ref{geneticspread}.
+
+
+\subsubsection{Correlation with Ifit1 expression levels}
+
+In an attempt to delve deeper into the possible suitability of Ifit1 expression as a metric of physiology, linear regression modelling was employed. Various metrics pertinent to blood pressure were assessed; mean arterial pressure, beats per minute, baroreceptor set point, and baroreceptor sensitivity. Regression modelling revealed a mixture of results.
+
+One of the key reasons for the poor correlations between Ifit1 and the metric being assess, is the robust rise in Ifit1 levels in the juvenile animals. While the direct blood pressure measurements have shown the juvenile SHRs to have elevated blood pressure as compared with their age-matched controls, their blood pressure is not as fully developed as within the adult SHRs. This, coupled with the elevated expression of Ifit1 in SHR juveniles compared with SHR adults, leads to cluster of animals with modestly elevated blood pressure and maximum expression of ifit1. This cluster of juvenile SHRs throws the linear regression model and prevents an accurate regression line from being drawn. 
+
+With this in mind, an argument could be made for expanding upon this approach with the use of non-linear regression. Here, for simplicity a linear model was employed. However multiple biomarkers have been found to follow non-linear patterns in their diagnostic potential. For example, a study in 2011 found levels of cerebrospinal fluid $\beta$-Amyloid and Tau proteins to follow a biphasic relationship with development of the Alzheimer's disease \cite{Williams2011}. For this reason, an iterative approach towards regression modelling may reveal a better "Goodness of Fit" for the model produced. However before this approach is employed, efforts need to be made to ensure the Ifit1 transcript is truly a suitable biomarker for hypertension and not simply due to a heterogeneity SHR transcriptome. 
+
+\subsection{Oaz1 as a reference gene}
+
+A literature review of the genes showing the lowest \acrshort{cv} percentages revealed that only Ornithine decarboxylase antizyme 1 (Oaz1) has been previously highlighted as a reference gene from a range of sample preparations \cite{10.1371/journal.pone.0006162,DeJonge2007}. 
+
+For this reason, Oaz1 was selected for validation against the new cohort of cDNA samples to confirm it was stable in its expression across both strains. Oaz1 performed suitably within the juvenile cohorts, as no significant difference existed between the strains given the equal quantity of RNA used for the analysis. This stability across the individuals therefore allows for each sample to be normalised against its expression. 
+
+As Oaz1 was selected based only RNAseq data from juvenile rats, there was no way of anticipating its expression profiles between the normotensive and hypertensive animals at the 12 week adult age. From the qPCR (Figure ~\ref{fig:OAZ1 Expression}), Oaz1 showed a downward trend in the aged animals. This was not significant across ages within the same strain, however was between the WKY and SHR at the adult age. For this reason, oaz1 does not present a suitable reference gene for the adult comparison, preventing an accurate profiling of ifit1 expression as the animals age. In order to find a reference gene that does not display significant differences between the strains, at any given age, additional transcripts highlighted by the \acrshort{cv} analysis should be assessed at the adult age. An alternative to this, would be to carry out a high-throughput qPCR assay plate, such as those outlined in section \ref{RNAseq vs MicroArray}. Indeed many of these plates have been designed for identifying suitable reference genes, and can be custom built to include the top reference gene candidates produced by the \acrshort{cv} analysis outlined here. However often these can only analyse a single sample at a time, and once this is scaled to include multiple age groups across both strains, the cost becomes prohibitively large, and comparable to conducting RNAseq analysis on these groups. 
+
+\subsection{Genetic spread of the \acrshort{shr} and \acrshort{wky} rats} \label{geneticspread}
+
+The \acrshort{shr} is an inbred rat strain that was originally established from outbred Wistar rats that displayed elevated \acrshort{bp} \cite{NAP20031}. The normotensive control strain, the \acrshort{wky}, was established from the same Wistar stock as the \acrshort{shr} and as a result is commonly used as a control strain for the \acrshort{shr} for studies conducted around the world. Due to the global usage of the \acrshort{wky} and \acrshort{shr} strains, the sources of animals vary between studies. This translates to significant levels of variability in the results obtained and can be attributed, in part, to the fact that the \acrshort{wky} breeding stock was distributed to breeders before being fully inbred \cite{Kurtz1989,Louis1990,Pare1997}. Furthermore, the littermates used for producing the inbred \acrshort{wky} from the Wistar rats were selected $>$10 years after the initiation of inbreeding for the \acrshort{shr} \cite{Louis1990}. This further increases the heterogeneity between the strains, and has caused many to question the validity of using the \acrshort{wky} as a control for the \acrshort{shr} \cite{StLezin1992}.
+
+While some substrains of the \acrshort{shr} have been observed, the level of homogeneity among \acrshort{shr}s is believed to be much greater than within \acrshort{wky}s. This is exemplified by the near 100\% incidence of hypertension within the \acrshort{shr} across the world \cite{Louis1990,NAP20031}. This observation is further supported here via direct blood pressure measurements in a colony of \acrshort{shr}s that were geographically remote from the animals used in section \ref{candidatesqpcr}. A study in 2013 set out to map these differences in the genetic architecture of the \acrshort{wky} and \acrshort{shr} substrains from different sources \cite{doi:10.1152/physiolgenomics.00002.2013}. The team took 16 commonly used \acrshort{wky} and \acrshort{shr} substrains and used genome-wide \acrshort{snp} genotyping data to map levels of genetic drift. They found a large genetic divergence within both of the strains and were able to resolve the substrains through \acrfull{mds}, revealing distinct clustering based on the supplier from which the substrain was obtained. Based on the 9,407 \acrshort{snp}s covered, the team found a non-negligible genetic difference of ~2.5\% between two of the \acrshort{wky} substrains tested. They propose these subtle differences to be responsible for the significantly different phenotypes observed across behavioural paradigms from \acrshort{wky}s obtained from different vendors \cite{Pare1997}. 
+
+With respect to the Ifit1 blood expression profiles observed for both the Brazilian and U.K. cohorts, a similar pattern of expression could be found. However, data from these experiments can only shed light on relative fold changes between the strains and can not be used to compare the cohorts themselves. These were isolated experiments, making use of relative abundances produced by internal normalisation, before being displayed as a ratio of expression between the strains. An interesting comparison could be made between the different colonies if tissue was obtained at the same time, and processed identically. However, this was not possible due to logistical difficulties when conducting experiments across the world. One way to mitigate this drawback would be to conduct an absolute assessment of transcript abundance, making use of a calibration curve displaying known quantities of Ifit1 transcript. This way, it would be valid to compare experiments that were conducted at different times or locations by plotting the absolute abundances of Ifit1. Given the variability of genetic architecture outlined above, an absolute metric of expression would show just how stable Ifit1 expression is across several cohorts of \acrshort{shr}s that all robustly develop hypertension. 
+
+\subsection{Concluding remarks}
+
+Here, and despite the varied genetic architecture of these strains globally, a similar expression profile of Ifit1 was observed within this geographically distinct cohort of animals. This further validates its suitability as a comparative biomarker between these two strains. 
+
+Furthermore, this chapter was successful in clarifying an important assumption made at the outset of this work. Previous work focused on 4-weeks being a prehypertensive age within the \acrshort{shr} model of hypertension. Here direct blood pressure readings contradict this assumption, showing a significant increase in blood pressure between the \acrshort{wky} and \acrshort{shr} strains. This clarification is key, as it no longer allows for candidate biomarkers to be seen as prognostic at this age. However it does strengthen the use of Ifit1 as a generalised biomarker of hypertension as its profile remains elevated across these two ages tested. 
+
+Regardless, Ifit1 needs to be taken forward from the classical \acrshort{wky} \textit{versus} \acrshort{shr} comparison and interrogated against additional animal models of hypertension. These additional animal models all vary in the aspects of human hypertension they emulate, potentially allowing a correlation between Ifit1 expression and the specific aetiology of the disease each model represents. By profiling its expression in additional animal models of hypertension, the trasnscript's suitability as a diagnostic tool can be determined.
